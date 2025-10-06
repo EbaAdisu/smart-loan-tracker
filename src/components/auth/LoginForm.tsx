@@ -3,6 +3,7 @@
 import { authClient } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -23,13 +24,18 @@ export default function LoginForm() {
       });
 
       if (error) {
-        setError(error.message || 'An error occurred during sign in');
+        const message = error.message || 'An error occurred during sign in';
+        setError(message);
+        toast.error(message);
       } else {
+        toast.success('Signed in successfully');
         router.push('/dashboard');
         router.refresh();
       }
     } catch {
-      setError('An unexpected error occurred');
+      const message = 'An unexpected error occurred';
+      setError(message);
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -37,6 +43,7 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <Toaster position="top-right" />
       <div>
         <label
           htmlFor="email"

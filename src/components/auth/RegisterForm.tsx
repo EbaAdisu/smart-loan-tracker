@@ -3,19 +3,19 @@
 import { authClient } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function RegisterForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
+    console.log(email, password, name);
 
     try {
       const { error } = await authClient.signUp.email({
@@ -25,13 +25,17 @@ export default function RegisterForm() {
       });
 
       if (error) {
-        setError(error.message || 'An error occurred during registration');
+        const message =
+          error.message || 'An error occurred during registration';
+        toast.error(message);
       } else {
+        toast.success('Account created successfully');
         router.push('/dashboard');
         router.refresh();
       }
     } catch {
-      setError('An unexpected error occurred');
+      const message = 'An unexpected error occurred';
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -39,6 +43,7 @@ export default function RegisterForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <Toaster position="top-right" />
       <div>
         <label
           htmlFor="name"
@@ -90,8 +95,6 @@ export default function RegisterForm() {
           className="mt-1 block w-full px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-foreground"
         />
       </div>
-
-      {error && <div className="text-foreground text-sm">{error}</div>}
 
       <button
         type="submit"
