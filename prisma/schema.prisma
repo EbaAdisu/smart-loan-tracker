@@ -1,5 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -11,52 +9,61 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  name      String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id            String    @id @map("_id")
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  sessions      Session[]
+  accounts      Account[]
 
-  // Relations
-  loans Loan[]
+  @@unique([email])
+  @@map("user")
 }
 
-model Loan {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String   @map("user_id") @db.ObjectId
-  personName      String   @map("person_name")
-  amount          Float
-  remainingAmount Float
-  loanType        LoanType @map("loan_type")
-  description     String?
-  status          LoanStatus @default(ACTIVE)
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
+model Session {
+  id        String   @id @map("_id")
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Relations
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  payments Payment[]
+  @@unique([token])
+  @@map("session")
 }
 
-model Payment {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  loanId      String   @map("loan_id") @db.ObjectId
-  amount      Float
-  paymentDate DateTime @map("payment_date")
-  notes       String?
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+model Account {
+  id                    String    @id @map("_id")
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
-  // Relations
-  loan Loan @relation(fields: [loanId], references: [id], onDelete: Cascade)
+  @@map("account")
 }
 
-enum LoanType {
-  I_OWE_THEM
-  THEY_OWE_ME
-}
+model Verification {
+  id         String   @id @map("_id")
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
 
-enum LoanStatus {
-  ACTIVE
-  PAID
+  @@map("verification")
 }

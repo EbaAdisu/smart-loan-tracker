@@ -22,10 +22,7 @@ export const auth = betterAuth({
   },
   user: {
     additionalFields: {
-      name: {
-        type: 'string',
-        required: true,
-      },
+      // Add any additional fields here if needed
     },
   },
   secret: process.env.BETTER_AUTH_SECRET,

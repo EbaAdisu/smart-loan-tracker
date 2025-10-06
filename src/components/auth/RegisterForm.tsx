@@ -25,6 +25,7 @@ export default function RegisterForm() {
     values: RegisterFormData,
     { setSubmitting, setFieldError }: FormikHelpers<RegisterFormData>
   ) => {
+    console.log('values', values);
     try {
       const { error } = await authClient.signUp.email({
         email: values.email,
