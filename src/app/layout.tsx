@@ -41,10 +41,24 @@ export default function RootLayout({
         <nav className="bg-background shadow-sm border-b border-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
-              <div className="flex items-center">
+              <div className="flex items-center gap-8">
                 <h1 className="text-xl font-semibold text-foreground">
                   Smart Loan Tracker
                 </h1>
+                <div className="hidden md:flex items-center gap-6">
+                  <a
+                    href="/"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Dashboard
+                  </a>
+                  <a
+                    href="/payments"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Payments
+                  </a>
+                </div>
               </div>
               <div className="flex items-center gap-3">
                 <AuthButton />

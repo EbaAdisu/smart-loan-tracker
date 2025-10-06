@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     // Update the remaining amount on the loan
     const newRemainingAmount = Number(loan.remainingAmount) - Number(amount);
     await loanService.updateRemainingAmount(loanId, newRemainingAmount);
-    
+
     // Get the updated loan
     const updatedLoan = await loanService.findById(loanId, session.user.id);
 

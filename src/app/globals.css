@@ -14,6 +14,17 @@
   --primary-foreground: #ffffff;
   --accent: #c9c9c9;
   --accent-foreground: #111111;
+  --card: #ffffff;
+  --card-foreground: #111111;
+  --popover: #ffffff;
+  --popover-foreground: #111111;
+  --secondary: #f6f6f6;
+  --secondary-foreground: #111111;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --ring: #111111;
+  --input: #e5e5e5;
+  --radius: 0.5rem;
 }
 
 @theme inline {
@@ -29,6 +40,16 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -48,6 +69,16 @@
     --primary-foreground: #0a0a0a;
     --accent: #3a3a3a;
     --accent-foreground: #ededed;
+    --card: #0a0a0a;
+    --card-foreground: #ededed;
+    --popover: #0a0a0a;
+    --popover-foreground: #ededed;
+    --secondary: #121212;
+    --secondary-foreground: #ededed;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --ring: #ededed;
+    --input: #262626;
   }
 }
 
@@ -65,6 +96,16 @@
   --primary-foreground: #ffffff;
   --accent: #c9c9c9;
   --accent-foreground: #111111;
+  --card: #ffffff;
+  --card-foreground: #111111;
+  --popover: #ffffff;
+  --popover-foreground: #111111;
+  --secondary: #f6f6f6;
+  --secondary-foreground: #111111;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --ring: #111111;
+  --input: #e5e5e5;
 }
 
 :root[data-theme='mono-dark'] {
@@ -80,6 +121,16 @@
   --primary-foreground: #0a0a0a;
   --accent: #3a3a3a;
   --accent-foreground: #ededed;
+  --card: #0a0a0a;
+  --card-foreground: #ededed;
+  --popover: #0a0a0a;
+  --popover-foreground: #ededed;
+  --secondary: #121212;
+  --secondary-foreground: #ededed;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --ring: #ededed;
+  --input: #262626;
 }
 
 body {

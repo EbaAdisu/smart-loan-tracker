@@ -2,6 +2,12 @@ import * as yup from 'yup';
 
 // Payment form validation schema
 export const paymentSchema = yup.object({
+  name: yup
+    .string()
+    .required('Name is required')
+    .min(2, 'Name must be at least 2 characters')
+    .max(100, 'Name must be less than 100 characters'),
+
   amount: yup
     .number()
     .required('Payment amount is required')
@@ -9,6 +15,11 @@ export const paymentSchema = yup.object({
     .min(0.01, 'Amount must be at least $0.01')
     .max(1000000, 'Amount cannot exceed $1,000,000')
     .typeError('Please enter a valid amount'),
+
+  direction: yup
+    .string()
+    .oneOf(['owe', 'owed'], 'Direction must be either "I owe" or "They owe me"')
+    .required('Direction is required'),
 
   paymentDate: yup
     .date()
@@ -25,6 +36,12 @@ export const paymentSchema = yup.object({
 // Payment form with loan context (includes maxAmount validation)
 export const createPaymentSchema = (maxAmount: number) =>
   yup.object({
+    name: yup
+      .string()
+      .required('Name is required')
+      .min(2, 'Name must be at least 2 characters')
+      .max(100, 'Name must be less than 100 characters'),
+
     amount: yup
       .number()
       .required('Payment amount is required')
@@ -32,6 +49,14 @@ export const createPaymentSchema = (maxAmount: number) =>
       .min(0.01, 'Amount must be at least $0.01')
       .max(maxAmount, `Payment amount cannot exceed $${maxAmount.toFixed(2)}`)
       .typeError('Please enter a valid amount'),
+
+    direction: yup
+      .string()
+      .oneOf(
+        ['owe', 'owed'],
+        'Direction must be either "I owe" or "They owe me"'
+      )
+      .required('Direction is required'),
 
     paymentDate: yup
       .date()

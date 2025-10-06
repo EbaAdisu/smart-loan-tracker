@@ -1,7 +1,8 @@
 export interface Payment {
   id: string;
-  loanId: string;
+  name: string; // NEW: Who owes/owed
   amount: number;
+  direction: 'owe' | 'owed'; // NEW: Direction indicator
   paymentDate: Date;
   notes?: string;
   createdAt: Date;
@@ -9,9 +10,9 @@ export interface Payment {
 }
 
 export interface CreatePaymentData {
-  loanId: string;
+  name: string; // NEW: Who owes/owed
   amount: number;
+  direction: 'owe' | 'owed'; // NEW: Direction indicator
   paymentDate: Date;
   notes?: string;
 }
-
