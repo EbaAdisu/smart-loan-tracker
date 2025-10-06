@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  loans Loan[]
+}
+
+model Loan {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String   @map("user_id") @db.ObjectId
+  personName      String   @map("person_name")
+  amount          Float
+  remainingAmount Float
+  loanType        LoanType @map("loan_type")
+  description     String?
+  status          LoanStatus @default(ACTIVE)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payments Payment[]
+}
+
+model Payment {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  loanId      String   @map("loan_id") @db.ObjectId
+  amount      Float
+  paymentDate DateTime @map("payment_date")
+  notes       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  loan Loan @relation(fields: [loanId], references: [id], onDelete: Cascade)
+}
+
+enum LoanType {
+  I_OWE_THEM
+  THEY_OWE_ME
+}
+
+enum LoanStatus {
+  ACTIVE
+  PAID
+}
