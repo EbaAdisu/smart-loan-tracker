@@ -214,7 +214,6 @@ export default function DashboardPage() {
         {notification && (
           <Notification
             message={notification.message}
-            type={notification.type}
             onClose={() => setNotification(null)}
           />
         )}

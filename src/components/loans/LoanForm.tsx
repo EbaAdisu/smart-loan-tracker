@@ -47,7 +47,7 @@ export default function LoanForm({
           htmlFor="personName"
           className="block text-sm font-medium text-foreground"
         >
-          Person's Name
+          Person&apos;s Name
         </label>
         <input
           id="personName"

@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Update the remaining amount on the loan
-    const newRemainingAmount = loan.remainingAmount - amount;
+    const newRemainingAmount = Number(loan.remainingAmount) - Number(amount);
     const updatedLoan = await prisma.loan.update({
       where: { id: loanId },
       data: {
@@ -64,4 +64,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

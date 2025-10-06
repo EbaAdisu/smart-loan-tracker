@@ -18,19 +18,19 @@ export default function RegisterForm() {
     setError('');
 
     try {
-      const { data, error } = await authClient.signUp.email({
+      const { error } = await authClient.signUp.email({
         email,
         password,
         name,
       });
 
       if (error) {
-        setError(error.message);
+        setError(error.message || 'An error occurred during registration');
       } else {
         router.push('/dashboard');
         router.refresh();
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred');
     } finally {
       setIsLoading(false);

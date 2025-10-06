@@ -21,9 +21,15 @@ export default function PaymentForm({
   const [formData, setFormData] = useState<CreatePaymentData>({
     loanId,
     amount: 0,
-    paymentDate: new Date().toISOString().split('T')[0],
+    paymentDate: new Date(),
     notes: '',
   });
+
+  // Convert Date to string for input value
+  const dateString =
+    formData.paymentDate instanceof Date
+      ? formData.paymentDate.toISOString().split('T')[0]
+      : new Date().toISOString().split('T')[0];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,7 +85,7 @@ export default function PaymentForm({
           id="paymentDate"
           name="paymentDate"
           type="date"
-          value={formData.paymentDate}
+          value={dateString}
           onChange={handleChange}
           required
           className="mt-1 block w-full px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-foreground"

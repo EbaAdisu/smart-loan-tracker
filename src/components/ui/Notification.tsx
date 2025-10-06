@@ -11,10 +11,9 @@ interface NotificationProps {
 
 export default function Notification({
   message,
-  type,
   onClose,
   duration = 5000,
-}: NotificationProps) {
+}: Omit<NotificationProps, 'type'>) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {

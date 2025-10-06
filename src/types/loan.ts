@@ -1,3 +1,5 @@
+import { Payment } from './payment';
+
 export type LoanType = 'I_OWE_THEM' | 'THEY_OWE_ME';
 export type LoanStatus = 'ACTIVE' | 'PAID';
 
@@ -29,4 +31,3 @@ export interface UpdateLoanData {
   description?: string;
   status?: LoanStatus;
 }
-
