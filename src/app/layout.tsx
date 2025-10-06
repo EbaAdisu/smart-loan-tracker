@@ -2,6 +2,7 @@ import AuthButton from '@/components/auth/AuthButton';
 import ThemeToggle from '@/components/theme/ThemeToggle';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import NextTopLoader from 'nextjs-toploader';
 import './globals.css';
 
 const geistSans = Geist({
@@ -29,6 +30,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <NextTopLoader
+          color="var(--primary)"
+          height={3}
+          showSpinner={false}
+          crawl={true}
+          speed={200}
+          easing="ease"
+        />
         <nav className="bg-background shadow-sm border-b border-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
