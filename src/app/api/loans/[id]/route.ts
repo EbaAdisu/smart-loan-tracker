@@ -1,5 +1,5 @@
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { loanService } from '@/lib/database';
 import { UpdateLoanData } from '@/types';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -19,22 +19,11 @@ export async function PUT(
     const body: UpdateLoanData = await request.json();
     const { id } = await params;
 
-    // Verify the loan belongs to the user
-    const existingLoan = await prisma.loan.findFirst({
-      where: {
-        id,
-        userId: session.user.id,
-      },
-    });
+    const updatedLoan = await loanService.update(id, session.user.id, body);
 
-    if (!existingLoan) {
+    if (!updatedLoan) {
       return NextResponse.json({ error: 'Loan not found' }, { status: 404 });
     }
-
-    const updatedLoan = await prisma.loan.update({
-      where: { id },
-      data: body,
-    });
 
     return NextResponse.json(updatedLoan);
   } catch (error) {
@@ -61,21 +50,11 @@ export async function DELETE(
 
     const { id } = await params;
 
-    // Verify the loan belongs to the user
-    const existingLoan = await prisma.loan.findFirst({
-      where: {
-        id,
-        userId: session.user.id,
-      },
-    });
+    const deleted = await loanService.delete(id, session.user.id);
 
-    if (!existingLoan) {
+    if (!deleted) {
       return NextResponse.json({ error: 'Loan not found' }, { status: 404 });
     }
-
-    await prisma.loan.delete({
-      where: { id },
-    });
 
     return NextResponse.json({ message: 'Loan deleted successfully' });
   } catch (error) {

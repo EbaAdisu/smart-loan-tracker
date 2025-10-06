@@ -1,5 +1,5 @@
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { loanService } from '@/lib/database';
 import { CreateLoanData } from '@/types';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -13,17 +13,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const loans = await prisma.loan.findMany({
-      where: {
-        userId: session.user.id,
-      },
-      include: {
-        payments: true,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+    const loans = await loanService.findMany(session.user.id);
 
     return NextResponse.json(loans);
   } catch (error) {
@@ -52,15 +42,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid loan data' }, { status: 400 });
     }
 
-    const loan = await prisma.loan.create({
-      data: {
-        userId: session.user.id,
-        personName,
-        amount,
-        remainingAmount: amount,
-        loanType,
-        description,
-      },
+    const loan = await loanService.create({
+      userId: session.user.id,
+      personName,
+      amount,
+      loanType,
+      description,
     });
 
     return NextResponse.json(loan, { status: 201 });

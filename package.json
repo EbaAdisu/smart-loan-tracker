@@ -10,18 +10,15 @@
     "lint:colors": "node -e \"const fs=require('fs');const rgx=/(bg|text|border)-(red|green|blue|pink|purple|yellow|orange|indigo|emerald|teal|cyan|fuchsia)(-|\\b)/;function walk(p){const st=fs.statSync(p);if(st.isDirectory()){for(const f of fs.readdirSync(p)){if(f==='node_modules'||f==='.next')continue;walk(p+'/'+f)}}else if(st.isFile()){const ext=['.ts','.tsx','.js','.jsx','.md','.css'];if(!ext.some(e=>p.endsWith(e)))return;const s=fs.readFileSync(p,'utf8');if(rgx.test(s)){console.error('Non-neutral color found in',p);process.exitCode=1}}}walk('.');\"",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "db:generate": "prisma generate",
-    "db:push": "prisma db push",
-    "db:migrate": "prisma migrate dev",
-    "db:studio": "prisma studio"
+    "db:test": "node scripts/test-connection.js",
+    "db:migrate": "node scripts/migrate-data.js"
   },
   "dependencies": {
-    "@prisma/client": "^6.16.3",
     "better-auth": "^1.3.25",
     "formik": "^2.4.6",
+    "mongodb": "^6.20.0",
     "next": "15.5.4",
     "nextjs-toploader": "^3.9.17",
-    "prisma": "^6.16.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.63.0",

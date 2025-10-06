@@ -1,11 +1,16 @@
 import { betterAuth } from 'better-auth';
-import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { prisma } from './prisma';
+import { mongodbAdapter } from 'better-auth/adapters/mongodb';
+import { getDatabase, client } from './mongodb';
 
-export const auth = betterAuth({
-  database: prismaAdapter(prisma, {
-    provider: 'mongodb',
-  }),
+// Create auth instance with MongoDB adapter
+const createAuth = async () => {
+  const db = await getDatabase();
+  const mongoClient = await client;
+  
+  return betterAuth({
+    database: mongodbAdapter(db, {
+      client: mongoClient,
+    }),
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: false,
@@ -26,7 +31,11 @@ export const auth = betterAuth({
     },
   },
   secret: process.env.BETTER_AUTH_SECRET,
-});
+  });
+};
+
+// Export the auth instance
+export const auth = await createAuth();
 
 export type Session = typeof auth.$Infer.Session;
 export type User = typeof auth.$Infer.Session.user;
