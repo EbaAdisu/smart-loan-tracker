@@ -47,7 +47,7 @@ export default function PaymentForm({
       <div>
         <label
           htmlFor="amount"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-foreground"
         >
           Payment Amount ($)
         </label>
@@ -61,9 +61,9 @@ export default function PaymentForm({
           value={formData.amount}
           onChange={handleChange}
           required
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-foreground"
         />
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-muted-foreground">
           Maximum: ${maxAmount.toFixed(2)}
         </p>
       </div>
@@ -71,7 +71,7 @@ export default function PaymentForm({
       <div>
         <label
           htmlFor="paymentDate"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-foreground"
         >
           Payment Date
         </label>
@@ -82,14 +82,14 @@ export default function PaymentForm({
           value={formData.paymentDate}
           onChange={handleChange}
           required
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-foreground"
         />
       </div>
 
       <div>
         <label
           htmlFor="notes"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-foreground"
         >
           Notes (Optional)
         </label>
@@ -99,7 +99,7 @@ export default function PaymentForm({
           value={formData.notes}
           onChange={handleChange}
           rows={3}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-foreground"
         />
       </div>
 
@@ -109,14 +109,14 @@ export default function PaymentForm({
           disabled={
             isLoading || formData.amount <= 0 || formData.amount > maxAmount
           }
-          className="flex-1 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50"
+          className="flex-1 bg-primary text-primary-foreground py-2 px-4 rounded-md hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-foreground disabled:opacity-50"
         >
           {isLoading ? 'Adding...' : 'Add Payment'}
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          className="flex-1 bg-muted text-foreground py-2 px-4 rounded-md hover:bg-accent focus:outline-none focus:ring-2 focus:ring-foreground"
         >
           Cancel
         </button>
@@ -124,4 +124,3 @@ export default function PaymentForm({
     </form>
   );
 }
-

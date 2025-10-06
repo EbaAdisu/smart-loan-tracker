@@ -26,9 +26,8 @@ export default function LoanCard({
   };
 
   const getStatusColor = () => {
-    if (loan.status === 'PAID') return 'bg-green-100 text-green-800';
-    if (loan.loanType === 'THEY_OWE_ME') return 'bg-blue-100 text-blue-800';
-    return 'bg-red-100 text-red-800';
+    // Monochrome badges
+    return 'bg-muted text-foreground';
   };
 
   const getStatusText = () => {
@@ -38,17 +37,19 @@ export default function LoanCard({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
+    <div className="bg-background rounded-lg shadow-sm border border-border p-4 hover:shadow-md transition-shadow">
       <div className="flex justify-between items-start">
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-foreground">
             {loan.personName}
           </h3>
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             {formatCurrency(loan.amount)} loan
           </p>
           {loan.description && (
-            <p className="text-sm text-gray-500 mt-1">{loan.description}</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              {loan.description}
+            </p>
           )}
         </div>
 
@@ -60,16 +61,16 @@ export default function LoanCard({
           </span>
 
           <div className="text-right">
-            <p className="text-lg font-semibold text-gray-900">
+            <p className="text-lg font-semibold text-foreground">
               {formatCurrency(loan.remainingAmount)}
             </p>
-            <p className="text-xs text-gray-500">remaining</p>
+            <p className="text-xs text-muted-foreground">remaining</p>
           </div>
         </div>
       </div>
 
       <div className="mt-4 flex justify-between items-center">
-        <div className="text-xs text-gray-500">
+        <div className="text-xs text-muted-foreground">
           Created {new Date(loan.createdAt).toLocaleDateString()}
         </div>
 
@@ -96,25 +97,25 @@ export default function LoanCard({
       </div>
 
       {showActions && (
-        <div className="mt-4 pt-4 border-t border-gray-200">
+        <div className="mt-4 pt-4 border-t border-border">
           <div className="flex space-x-2">
             {loan.status === 'ACTIVE' && (
               <button
                 onClick={() => onAddPayment(loan.id)}
-                className="flex-1 bg-green-600 text-white py-2 px-3 rounded-md text-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="flex-1 bg-primary text-primary-foreground py-2 px-3 rounded-md text-sm hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-foreground"
               >
                 Add Payment
               </button>
             )}
             <button
               onClick={() => onEdit(loan)}
-              className="flex-1 bg-blue-600 text-white py-2 px-3 rounded-md text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 bg-primary text-primary-foreground py-2 px-3 rounded-md text-sm hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-foreground"
             >
               Edit
             </button>
             <button
               onClick={() => onDelete(loan.id)}
-              className="flex-1 bg-red-600 text-white py-2 px-3 rounded-md text-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="flex-1 bg-accent text-accent-foreground py-2 px-3 rounded-md text-sm hover:bg-muted focus:outline-none focus:ring-2 focus:ring-foreground"
             >
               Delete
             </button>
@@ -124,4 +125,3 @@ export default function LoanCard({
     </div>
   );
 }
-

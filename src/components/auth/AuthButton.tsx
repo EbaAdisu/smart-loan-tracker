@@ -21,12 +21,12 @@ export default function AuthButton() {
   if (session) {
     return (
       <div className="flex items-center space-x-4">
-        <span className="text-sm text-gray-700">
+        <span className="text-sm text-muted-foreground">
           Hello, {session.user.name}
         </span>
         <button
           onClick={handleSignOut}
-          className="text-sm text-blue-600 hover:text-blue-800"
+          className="text-sm text-link hover:text-link-hover"
         >
           Sign Out
         </button>
@@ -38,13 +38,13 @@ export default function AuthButton() {
     <div className="flex space-x-2">
       <button
         onClick={() => router.push('/login')}
-        className="text-sm text-blue-600 hover:text-blue-800"
+        className="text-sm text-link hover:text-link-hover"
       >
         Sign In
       </button>
       <button
         onClick={() => router.push('/register')}
-        className="text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+        className="text-sm bg-primary text-primary-foreground px-3 py-1 rounded hover:bg-primary-hover"
       >
         Sign Up
       </button>

@@ -210,7 +210,7 @@ export default function DashboardPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         {notification && (
           <Notification
             message={notification.message}
@@ -222,19 +222,21 @@ export default function DashboardPage() {
         <div className="max-w-6xl mx-auto py-8 px-4">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-foreground">
               Welcome back, {session?.user.name}!
             </h1>
-            <p className="mt-2 text-gray-600">Track your loans and payments</p>
+            <p className="mt-2 text-muted-foreground">
+              Track your loans and payments
+            </p>
           </div>
 
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className="bg-white p-6 rounded-lg shadow">
+            <div className="bg-background p-6 rounded-lg shadow border border-border">
               <div className="flex items-center">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
                   <svg
-                    className="w-6 h-6 text-green-600"
+                    className="w-6 h-6 text-foreground"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -248,21 +250,21 @@ export default function DashboardPage() {
                   </svg>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">
+                  <p className="text-sm font-medium text-muted-foreground">
                     They owe me
                   </p>
-                  <p className="text-2xl font-bold text-green-600">
+                  <p className="text-2xl font-bold text-foreground">
                     {formatCurrency(theyOweMe)}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow">
+            <div className="bg-background p-6 rounded-lg shadow border border-border">
               <div className="flex items-center">
-                <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
                   <svg
-                    className="w-6 h-6 text-red-600"
+                    className="w-6 h-6 text-foreground"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -276,10 +278,10 @@ export default function DashboardPage() {
                   </svg>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">
+                  <p className="text-sm font-medium text-muted-foreground">
                     I owe them
                   </p>
-                  <p className="text-2xl font-bold text-red-600">
+                  <p className="text-2xl font-bold text-foreground">
                     {formatCurrency(iOweThem)}
                   </p>
                 </div>
@@ -291,7 +293,7 @@ export default function DashboardPage() {
           <div className="mb-6">
             <button
               onClick={() => setShowAddForm(true)}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium"
+              className="bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary-hover font-medium"
             >
               Add New Loan
             </button>
@@ -299,7 +301,7 @@ export default function DashboardPage() {
 
           {/* Forms */}
           {showAddForm && (
-            <div className="mb-6 bg-white p-6 rounded-lg shadow">
+            <div className="mb-6 bg-background p-6 rounded-lg shadow border border-border">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Add New Loan
               </h2>
@@ -311,7 +313,7 @@ export default function DashboardPage() {
           )}
 
           {editingLoan && (
-            <div className="mb-6 bg-white p-6 rounded-lg shadow">
+            <div className="mb-6 bg-background p-6 rounded-lg shadow border border-border">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Edit Loan
               </h2>
@@ -323,7 +325,7 @@ export default function DashboardPage() {
           )}
 
           {showPaymentForm && selectedLoanForPayment && (
-            <div className="mb-6 bg-white p-6 rounded-lg shadow">
+            <div className="mb-6 bg-background p-6 rounded-lg shadow border border-border">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Add Payment for {selectedLoanForPayment.personName}
               </h2>
@@ -340,15 +342,15 @@ export default function DashboardPage() {
           )}
 
           {/* Loans List */}
-          <div className="bg-white rounded-lg shadow">
+          <div className="bg-background rounded-lg shadow border border-border">
             <div className="p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
                 Your Loans
               </h2>
               {isLoading ? (
                 <div className="text-center py-8">
                   <LoadingSpinner size="lg" className="mx-auto" />
-                  <p className="mt-2 text-gray-500">Loading loans...</p>
+                  <p className="mt-2 text-muted-foreground">Loading loans...</p>
                 </div>
               ) : (
                 <LoanList

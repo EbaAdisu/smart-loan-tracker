@@ -45,7 +45,7 @@ export default function LoanForm({
       <div>
         <label
           htmlFor="personName"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-foreground"
         >
           Person's Name
         </label>
@@ -56,14 +56,14 @@ export default function LoanForm({
           value={formData.personName}
           onChange={handleChange}
           required
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-foreground"
         />
       </div>
 
       <div>
         <label
           htmlFor="amount"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-foreground"
         >
           Amount ($)
         </label>
@@ -76,14 +76,14 @@ export default function LoanForm({
           value={formData.amount}
           onChange={handleChange}
           required
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-foreground"
         />
       </div>
 
       <div>
         <label
           htmlFor="loanType"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-foreground"
         >
           Loan Type
         </label>
@@ -92,7 +92,7 @@ export default function LoanForm({
           name="loanType"
           value={formData.loanType}
           onChange={handleChange}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-foreground"
         >
           <option value="THEY_OWE_ME">They owe me</option>
           <option value="I_OWE_THEM">I owe them</option>
@@ -102,7 +102,7 @@ export default function LoanForm({
       <div>
         <label
           htmlFor="description"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-foreground"
         >
           Description (Optional)
         </label>
@@ -112,7 +112,7 @@ export default function LoanForm({
           value={formData.description}
           onChange={handleChange}
           rows={3}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-foreground"
         />
       </div>
 
@@ -120,14 +120,14 @@ export default function LoanForm({
         <button
           type="submit"
           disabled={isLoading || formData.amount <= 0}
-          className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          className="flex-1 bg-primary text-primary-foreground py-2 px-4 rounded-md hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-foreground disabled:opacity-50"
         >
           {isLoading ? 'Adding...' : 'Add Loan'}
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          className="flex-1 bg-muted text-foreground py-2 px-4 rounded-md hover:bg-accent focus:outline-none focus:ring-2 focus:ring-foreground"
         >
           Cancel
         </button>
@@ -135,4 +135,3 @@ export default function LoanForm({
     </form>
   );
 }
-

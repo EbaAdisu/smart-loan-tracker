@@ -2,26 +2,26 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto py-12 px-4">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900">
+          <h1 className="text-4xl font-bold text-foreground">
             Simple Loan Tracker
           </h1>
-          <p className="mt-4 text-lg text-gray-600">
+          <p className="mt-4 text-lg text-muted-foreground">
             Track who owes you money and who you owe money to. Simple and
             straightforward.
           </p>
           <div className="mt-8 flex justify-center gap-4">
             <Link
               href="/register"
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+              className="bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary-hover"
             >
               Get Started
             </Link>
             <Link
               href="/login"
-              className="bg-white text-blue-600 px-6 py-3 rounded-lg border border-blue-600 hover:bg-blue-50"
+              className="bg-background text-link px-6 py-3 rounded-lg border border-border hover:bg-muted"
             >
               Sign In
             </Link>
@@ -29,10 +29,10 @@ export default function Home() {
         </div>
 
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+          <div className="bg-background p-6 rounded-lg shadow border border-border">
+            <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center mb-4">
               <svg
-                className="w-6 h-6 text-blue-600"
+                className="w-6 h-6 text-foreground"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -45,18 +45,18 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               Add Loans
             </h3>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Track money you lent or borrowed from friends and family.
             </p>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+          <div className="bg-background p-6 rounded-lg shadow border border-border">
+            <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center mb-4">
               <svg
-                className="w-6 h-6 text-green-600"
+                className="w-6 h-6 text-foreground"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -69,18 +69,18 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               Track Payments
             </h3>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Record when payments are made to keep your loans up to date.
             </p>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow">
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+          <div className="bg-background p-6 rounded-lg shadow border border-border">
+            <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center mb-4">
               <svg
-                className="w-6 h-6 text-purple-600"
+                className="w-6 h-6 text-foreground"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -93,10 +93,10 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               Simple Overview
             </h3>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               See at a glance who owes you money and who you owe money to.
             </p>
           </div>

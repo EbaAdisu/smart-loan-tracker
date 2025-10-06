@@ -6,6 +6,10 @@ Scope: Next.js App Router with Tailwind v4 and existing CSS variables in `src/ap
 
 ---
 
+Note on "blue" mentions: Any references to `blue` (e.g., `bg-blue-600`) in this plan are examples of current code that must be removed/replaced. The final design is strictly grayscale (black/white with neutral grays only). These mentions are there to call out what to refactor away, not what to implement.
+
+---
+
 ### 1) Establish single source of truth for theme tokens
 
 - Create/expand a small, centralized token map using CSS variables and Tailwind v4 `@theme` inline tokens in `src/app/globals.css`.
@@ -112,6 +116,7 @@ Token names (no code here; values listed for clarity only):
   - `--link`: near-black (e.g., `#111111`)
   - `--link-hover`: medium-dark gray (e.g., `#2d2d2d`)
   - `--primary`: near-black (used for primary buttons)
+  - `--primary-hover`: slightly lighter near-black
   - `--primary-foreground`: white
   - `--accent`: medium gray (used for secondary surfaces)
   - `--accent-foreground`: near-black
@@ -125,6 +130,7 @@ Token names (no code here; values listed for clarity only):
   - `--link`: very light gray
   - `--link-hover`: mid-light gray
   - `--primary`: very light gray (inverted primary)
+  - `--primary-hover`: slightly darker very light gray
   - `--primary-foreground`: near-black
   - `--accent`: mid-dark gray
   - `--accent-foreground`: very light gray
@@ -147,8 +153,13 @@ Map tokens to Tailwind v4 `@theme` custom properties so we can use `bg-backgroun
 
 ### 10) How to change theme in the future
 
-- Edit the token values in one place (`src/app/globals.css` token blocks). No component changes required if semantic classes are followed.
-- If introducing a brand color later, add a new semantic token (e.g., `--brand`) and map a specific component variant to it, while keeping core UI monochrome.
+**ONE FILE ONLY**: Edit the token values in `src/app/globals.css` token blocks. That's it. No component changes required.
+
+- Want to switch from monochrome to a colored theme? Just update the token values in `globals.css`.
+- Want different grays? Just update the token values in `globals.css`.
+- Want to add brand colors? Add new tokens in `globals.css` and optionally create new semantic classes.
+
+**Zero component-by-component changes needed** - everything uses semantic classes that automatically pick up the new token values.
 
 ---
 
@@ -158,3 +169,40 @@ Map tokens to Tailwind v4 `@theme` custom properties so we can use `bg-backgroun
 - All surfaces and texts use semantic classes backed by tokens.
 - Optional theme toggle works; system preference respected by default.
 - AA contrast met for text and interactive elements in light and dark.
+
+---
+
+## Progress Tracking
+
+### Phase 1: Foundation Setup
+
+- [x] Define token names and monochrome palettes (light/dark)
+- [x] Update `src/app/globals.css` with complete token set and `@theme` mappings
+- [x] Add `data-theme` support on `html` in `src/app/layout.tsx`
+
+### Phase 2: Core UI Refactoring
+
+- [x] Refactor header/nav in `src/app/layout.tsx` to semantic classes
+- [x] Update `src/components/auth/AuthButton.tsx` to semantic classes
+- [x] Update `src/components/ProtectedRoute.tsx` to semantic classes
+
+### Phase 3: Page Updates
+
+- [x] Convert `src/app/page.tsx` (Home) to semantic classes
+- [x] Convert `src/app/dashboard/page.tsx` to semantic classes
+- [x] Scan and replace any remaining non-neutral utilities across repo
+
+### Phase 4: Quality & Enforcement
+
+- [ ] Run accessibility checks and adjust gray scale tokens if needed
+- [x] Add lint/CI guardrails to prevent color regressions
+- [x] Update `SETUP.md` with theme change instructions
+
+### Phase 5: Optional Enhancements
+
+- [x] Implement theme toggle mechanism (if desired)
+- [ ] Test theme switching functionality
+- [ ] Final visual review and adjustments
+
+**Current Status**: Phase 5 in progress (toggle implemented; testing pending)
+**Last Updated**: 2025-10-06

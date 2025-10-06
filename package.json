@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:colors": "node -e \"const fs=require('fs');const rgx=/(bg|text|border)-(red|green|blue|pink|purple|yellow|orange|indigo|emerald|teal|cyan|fuchsia)(-|\\b)/;function walk(p){const st=fs.statSync(p);if(st.isDirectory()){for(const f of fs.readdirSync(p)){if(f==='node_modules'||f==='.next')continue;walk(p+'/'+f)}}else if(st.isFile()){const ext=['.ts','.tsx','.js','.jsx','.md','.css'];if(!ext.some(e=>p.endsWith(e)))return;const s=fs.readFileSync(p,'utf8');if(rgx.test(s)){console.error('Non-neutral color found in',p);process.exitCode=1}}}walk('.');\"",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "db:generate": "prisma generate",
