@@ -1,7 +1,15 @@
 'use client';
 
+import FormError from '@/components/ui/FormError';
+import FormField from '@/components/ui/FormField';
+import FormSubmitButton from '@/components/ui/FormSubmitButton';
+import FormTextarea from '@/components/ui/FormTextarea';
+import {
+  CreatePaymentFormData,
+  createPaymentSchema,
+} from '@/lib/validation/schemas/paymentSchemas';
 import { CreatePaymentData } from '@/types';
-import { useState } from 'react';
+import { Formik, FormikHelpers } from 'formik';
 
 interface PaymentFormProps {
   loanId: string;
@@ -16,117 +24,90 @@ export default function PaymentForm({
   maxAmount,
   onSubmit,
   onCancel,
-  isLoading = false,
 }: PaymentFormProps) {
-  const [formData, setFormData] = useState<CreatePaymentData>({
-    loanId,
+  const initialValues: CreatePaymentFormData = {
     amount: 0,
     paymentDate: new Date(),
     notes: '',
-  });
-
-  // Convert Date to string for input value
-  const dateString =
-    formData.paymentDate instanceof Date
-      ? formData.paymentDate.toISOString().split('T')[0]
-      : new Date().toISOString().split('T')[0];
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (formData.amount <= 0 || formData.amount > maxAmount) return;
-
-    await onSubmit(formData);
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  const handleSubmit = async (
+    values: CreatePaymentFormData,
+    { setSubmitting, setFieldError }: FormikHelpers<CreatePaymentFormData>
   ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === 'amount' ? parseFloat(value) || 0 : value,
-    }));
+    try {
+      const paymentData: CreatePaymentData = {
+        loanId,
+        amount: values.amount,
+        paymentDate: values.paymentDate,
+        notes: values.notes,
+      };
+      await onSubmit(paymentData);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
+      setFieldError('submit', message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label
-          htmlFor="amount"
-          className="block text-sm font-medium text-foreground"
-        >
-          Payment Amount ($)
-        </label>
-        <input
-          id="amount"
-          name="amount"
-          type="number"
-          step="0.01"
-          min="0"
-          max={maxAmount}
-          value={formData.amount}
-          onChange={handleChange}
-          required
-          className="mt-1 block w-full px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-foreground"
-        />
-        <p className="mt-1 text-sm text-muted-foreground">
-          Maximum: ${maxAmount.toFixed(2)}
-        </p>
-      </div>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={createPaymentSchema(maxAmount)}
+      onSubmit={handleSubmit}
+    >
+      {(formik) => (
+        <form onSubmit={formik.handleSubmit} className="space-y-4">
+          <div>
+            <FormField
+              name="amount"
+              label="Payment Amount ($)"
+              type="number"
+              step="0.01"
+              min="0"
+              max={maxAmount}
+              required
+              formik={formik}
+            />
+            <p className="mt-1 text-sm text-muted-foreground">
+              Maximum: ${maxAmount.toFixed(2)}
+            </p>
+          </div>
 
-      <div>
-        <label
-          htmlFor="paymentDate"
-          className="block text-sm font-medium text-foreground"
-        >
-          Payment Date
-        </label>
-        <input
-          id="paymentDate"
-          name="paymentDate"
-          type="date"
-          value={dateString}
-          onChange={handleChange}
-          required
-          className="mt-1 block w-full px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-foreground"
-        />
-      </div>
+          <FormField
+            name="paymentDate"
+            label="Payment Date"
+            type="date"
+            required
+            formik={formik}
+          />
 
-      <div>
-        <label
-          htmlFor="notes"
-          className="block text-sm font-medium text-foreground"
-        >
-          Notes (Optional)
-        </label>
-        <textarea
-          id="notes"
-          name="notes"
-          value={formData.notes}
-          onChange={handleChange}
-          rows={3}
-          className="mt-1 block w-full px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-foreground"
-        />
-      </div>
+          <FormTextarea
+            name="notes"
+            label="Notes (Optional)"
+            rows={3}
+            formik={formik}
+          />
 
-      <div className="flex space-x-3">
-        <button
-          type="submit"
-          disabled={
-            isLoading || formData.amount <= 0 || formData.amount > maxAmount
-          }
-          className="flex-1 bg-primary text-primary-foreground py-2 px-4 rounded-md hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-foreground disabled:opacity-50"
-        >
-          {isLoading ? 'Adding...' : 'Add Payment'}
-        </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          className="flex-1 bg-muted text-foreground py-2 px-4 rounded-md hover:bg-accent focus:outline-none focus:ring-2 focus:ring-foreground"
-        >
-          Cancel
-        </button>
-      </div>
-    </form>
+          <FormError formik={formik} />
+
+          <div className="flex space-x-3">
+            <div className="flex-1">
+              <FormSubmitButton formik={formik}>Add Payment</FormSubmitButton>
+            </div>
+            <button
+              type="button"
+              onClick={onCancel}
+              disabled={formik.isSubmitting}
+              className="flex-1 bg-muted text-foreground py-2 px-4 rounded-md hover:bg-accent focus:outline-none focus:ring-2 focus:ring-foreground disabled:opacity-50"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
+    </Formik>
   );
 }
