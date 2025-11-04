@@ -6,8 +6,8 @@
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test",
-    "deploy:local": "hardhat ignition deploy ignition/modules/LoanTracker.ts --network localhost",
-    "deploy:sepolia": "hardhat ignition deploy ignition/modules/LoanTracker.ts --network sepolia",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "deploy:sepolia": "hardhat run scripts/deploy.ts --network sepolia",
     "node": "hardhat node"
   },
   "devDependencies": {
