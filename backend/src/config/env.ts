@@ -1,5 +1,9 @@
 // Environment variable configuration
+import { config } from 'dotenv';
 import { z } from 'zod';
+
+// Load .env file
+config();
 
 const envSchema = z.object({
   PORT: z.string().default('3000'),

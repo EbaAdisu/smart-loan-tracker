@@ -6,10 +6,10 @@ import { env } from "./env";
 
 // Create Better Auth instance
 export const auth = betterAuth({
-  database: mongodbAdapter(mongoose.connection),
+  database: mongodbAdapter(mongoose.connection.getClient().db()),
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false, // Set to true in production
+    requireEmailVerification: false,
   },
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
@@ -17,14 +17,6 @@ export const auth = betterAuth({
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // 1 day
-  },
-  user: {
-    additionalFields: {
-      name: {
-        type: "string",
-        required: true,
-      },
-    },
   },
 });
 

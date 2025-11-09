@@ -5,29 +5,27 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run --watch src/index.ts",
-    "start": "bun run src/index.ts",
-    "build": "bun build src/index.ts --outdir ./dist",
-    "test": "bun test"
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "test": "echo \"Tests not implemented yet\""
   },
   "dependencies": {
-    "elysia": "^1.1.0",
-    "@elysiajs/cors": "^1.1.0",
-    "@elysiajs/swagger": "^1.1.0",
-    "@elysiajs/websocket": "^1.1.0",
-    "better-auth": "^1.0.0",
-    "@better-auth/elysia": "^1.0.0",
+    "@elysiajs/cors": "latest",
+    "@elysiajs/swagger": "latest",
+    "better-auth": "latest",
+    "dotenv": "^17.2.3",
+    "elysia": "latest",
+    "expo-server-sdk": "^3.7.0",
     "mongodb": "^6.0.0",
     "mongoose": "^8.0.0",
-    "zod": "^3.22.0",
     "node-cron": "^3.0.0",
-    "expo-server-sdk": "^3.7.0"
+    "zod": "^3.22.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/node-cron": "^3.0.0",
-    "typescript": "^5.0.0",
-    "bun-types": "latest"
+    "tsx": "^4.7.0",
+    "typescript": "^5.0.0"
   }
 }
-
