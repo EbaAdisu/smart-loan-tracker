@@ -5,7 +5,9 @@ import logger from '../utils/logger';
 
 export class AuthController {
   // Handle Better Auth routes
-  static async handleAuthRequest(request: Request): Promise<Response> {
+  static async handleAuthRequest(context: any): Promise<Response> {
+    const { request } = context;
+    
     try {
       const auth = getAuth();
       return auth.handler(request);
@@ -19,15 +21,20 @@ export class AuthController {
   }
 
   // Create user profile after signup
-  static async createUserProfile(userId: string) {
+  static async createUserProfile(context: any) {
+    const { body, set } = context;
+    
     try {
+      const { userId } = body;
       await authService.createUserProfile(userId);
+      set.status = 201;
       return {
         success: true,
         message: 'User profile created',
       };
     } catch (error: any) {
       logger.error('Error creating user profile:', error);
+      set.status = 500;
       return {
         success: false,
         error: error.message || 'Failed to create user profile',
@@ -37,4 +44,3 @@ export class AuthController {
 }
 
 export default AuthController;
-

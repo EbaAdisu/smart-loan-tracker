@@ -6,35 +6,36 @@ import logger from '../utils/logger';
 
 export class LoanController {
   // Create new loan
-  static async createLoan(
-    userId: string,
-    data: {
-      lenderUserId: string;
-      borrowerUserId: string;
-      lenderName: string;
-      borrowerName: string;
-      amount: number;
-      reason?: string;
-      dueDate: Date;
-    }
-  ) {
+  static async createLoan(context: any) {
+    const { user, body, set } = context;
+
     try {
-      const loan = await loanService.createLoan(data);
+      const loan = await loanService.createLoan({
+        lenderUserId: body.lenderUserId,
+        borrowerUserId: body.borrowerUserId,
+        lenderName: body.lenderName,
+        borrowerName: body.borrowerName,
+        amount: body.amount,
+        reason: body.reason,
+        dueDate: new Date(body.dueDate),
+      });
 
       // Notify the other party
-      const otherUserId = data.lenderUserId === userId ? data.borrowerUserId : data.lenderUserId;
+      const otherUserId = body.lenderUserId === user.id ? body.borrowerUserId : body.lenderUserId;
       await notificationService.notifyStatusChange(
         otherUserId,
         loan.loanId,
         'A new loan has been created'
       );
 
+      set.status = 201;
       return {
         success: true,
         data: loan,
       };
     } catch (error: any) {
       logger.error('Error creating loan:', error);
+      set.status = 500;
       return {
         success: false,
         error: error.message || 'Failed to create loan',
@@ -43,20 +44,23 @@ export class LoanController {
   }
 
   // Get all loans for user
-  static async getUserLoans(userId: string, filters: { status?: string; role?: string }) {
+  static async getUserLoans(context: any) {
+    const { user, query, set } = context;
+
     try {
-      const { status, role } = filters;
-      const loans = await loanService.getUserLoans(userId, {
-        status: status as LoanStatus | undefined,
-        role: role as 'lender' | 'borrower' | 'all' | undefined,
+      const loans = await loanService.getUserLoans(user.id, {
+        status: query.status as LoanStatus | undefined,
+        role: query.role as 'lender' | 'borrower' | 'all' | undefined,
       });
 
+      set.status = 200;
       return {
         success: true,
         data: loans,
       };
     } catch (error: any) {
       logger.error('Error getting user loans:', error);
+      set.status = 500;
       return {
         success: false,
         error: error.message || 'Failed to get loans',
@@ -65,11 +69,14 @@ export class LoanController {
   }
 
   // Get loan by ID
-  static async getLoanById(loanId: string, userId: string) {
+  static async getLoanById(context: any) {
+    const { user, params, set } = context;
+
     try {
-      const loan = await loanService.getLoanById(loanId);
+      const loan = await loanService.getLoanById(params.loanId);
 
       if (!loan) {
+        set.status = 404;
         return {
           success: false,
           error: 'Loan not found',
@@ -77,19 +84,22 @@ export class LoanController {
       }
 
       // Check authorization
-      if (loan.lenderUserId !== userId && loan.borrowerUserId !== userId) {
+      if (loan.lenderUserId !== user.id && loan.borrowerUserId !== user.id) {
+        set.status = 403;
         return {
           success: false,
           error: 'Not authorized to view this loan',
         };
       }
 
+      set.status = 200;
       return {
         success: true,
         data: loan,
       };
     } catch (error: any) {
       logger.error('Error getting loan:', error);
+      set.status = 500;
       return {
         success: false,
         error: error.message || 'Failed to get loan',
@@ -98,21 +108,14 @@ export class LoanController {
   }
 
   // Update loan
-  static async updateLoan(
-    loanId: string,
-    userId: string,
-    data: {
-      status?: LoanStatus;
-      amount?: number;
-      reason?: string;
-      dueDate?: Date;
-      balanceRemaining?: number;
-    }
-  ) {
+  static async updateLoan(context: any) {
+    const { user, params, body, set } = context;
+
     try {
-      const loan = await loanService.getLoanById(loanId);
+      const loan = await loanService.getLoanById(params.loanId);
 
       if (!loan) {
+        set.status = 404;
         return {
           success: false,
           error: 'Loan not found',
@@ -120,7 +123,8 @@ export class LoanController {
       }
 
       // Check authorization
-      if (loan.lenderUserId !== userId && loan.borrowerUserId !== userId) {
+      if (loan.lenderUserId !== user.id && loan.borrowerUserId !== user.id) {
+        set.status = 403;
         return {
           success: false,
           error: 'Not authorized to update this loan',
@@ -128,27 +132,32 @@ export class LoanController {
       }
 
       const updateData = {
-        ...data,
-        dueDate: data.dueDate,
+        status: body.status,
+        amount: body.amount,
+        reason: body.reason,
+        dueDate: body.dueDate ? new Date(body.dueDate) : undefined,
+        balanceRemaining: body.balanceRemaining,
       };
-      const updatedLoan = await loanService.updateLoan(loanId, updateData);
+      const updatedLoan = await loanService.updateLoan(params.loanId, updateData);
 
       // Notify the other party
-      const otherUserId = loan.lenderUserId === userId ? loan.borrowerUserId : loan.lenderUserId;
-      if (data.status) {
+      const otherUserId = loan.lenderUserId === user.id ? loan.borrowerUserId : loan.lenderUserId;
+      if (body.status) {
         await notificationService.notifyStatusChange(
           otherUserId,
-          loanId,
-          `Loan status changed to ${data.status}`
+          params.loanId,
+          `Loan status changed to ${body.status}`
         );
       }
 
+      set.status = 200;
       return {
         success: true,
         data: updatedLoan,
       };
     } catch (error: any) {
       logger.error('Error updating loan:', error);
+      set.status = 500;
       return {
         success: false,
         error: error.message || 'Failed to update loan',
@@ -157,11 +166,14 @@ export class LoanController {
   }
 
   // Accept loan request
-  static async acceptLoan(loanId: string, userId: string) {
+  static async acceptLoan(context: any) {
+    const { user, params, set } = context;
+
     try {
-      const loan = await loanService.getLoanById(loanId);
+      const loan = await loanService.getLoanById(params.loanId);
 
       if (!loan) {
+        set.status = 404;
         return {
           success: false,
           error: 'Loan not found',
@@ -169,7 +181,8 @@ export class LoanController {
       }
 
       // Only borrower can accept
-      if (loan.borrowerUserId !== userId) {
+      if (loan.borrowerUserId !== user.id) {
+        set.status = 403;
         return {
           success: false,
           error: 'Only borrower can accept loan',
@@ -177,29 +190,32 @@ export class LoanController {
       }
 
       if (loan.status !== LoanStatus.PENDING) {
+        set.status = 400;
         return {
           success: false,
           error: 'Loan is not pending',
         };
       }
 
-      const updatedLoan = await loanService.updateLoan(loanId, {
+      const updatedLoan = await loanService.updateLoan(params.loanId, {
         status: LoanStatus.ACTIVE,
       });
 
       // Notify lender
       await notificationService.notifyStatusChange(
         loan.lenderUserId,
-        loanId,
+        params.loanId,
         'Loan has been accepted'
       );
 
+      set.status = 200;
       return {
         success: true,
         data: updatedLoan,
       };
     } catch (error: any) {
       logger.error('Error accepting loan:', error);
+      set.status = 500;
       return {
         success: false,
         error: error.message || 'Failed to accept loan',
@@ -208,11 +224,14 @@ export class LoanController {
   }
 
   // Record payment
-  static async recordPayment(loanId: string, userId: string, amount: number) {
+  static async recordPayment(context: any) {
+    const { user, params, body, set } = context;
+
     try {
-      const loan = await loanService.getLoanById(loanId);
+      const loan = await loanService.getLoanById(params.loanId);
 
       if (!loan) {
+        set.status = 404;
         return {
           success: false,
           error: 'Loan not found',
@@ -220,31 +239,34 @@ export class LoanController {
       }
 
       // Check authorization
-      if (loan.lenderUserId !== userId && loan.borrowerUserId !== userId) {
+      if (loan.lenderUserId !== user.id && loan.borrowerUserId !== user.id) {
+        set.status = 403;
         return {
           success: false,
           error: 'Not authorized to record payment for this loan',
         };
       }
 
-      await loanService.addPayment(loanId, amount);
-      const payments = await loanService.getPaymentHistory(loanId);
+      await loanService.addPayment(params.loanId, body.amount);
+      const payments = await loanService.getPaymentHistory(params.loanId);
       const payment = payments[0]; // Get the most recent payment
 
       // Notify the other party
-      const otherUserId = loan.lenderUserId === userId ? loan.borrowerUserId : loan.lenderUserId;
+      const otherUserId = loan.lenderUserId === user.id ? loan.borrowerUserId : loan.lenderUserId;
       await notificationService.notifyPaymentReceived(
         otherUserId,
-        loanId,
-        amount
+        params.loanId,
+        body.amount
       );
 
+      set.status = 201;
       return {
         success: true,
         data: payment,
       };
     } catch (error: any) {
       logger.error('Error recording payment:', error);
+      set.status = 500;
       return {
         success: false,
         error: error.message || 'Failed to record payment',
@@ -253,11 +275,14 @@ export class LoanController {
   }
 
   // Get payment history
-  static async getPaymentHistory(loanId: string, userId: string) {
+  static async getPaymentHistory(context: any) {
+    const { user, params, set } = context;
+
     try {
-      const loan = await loanService.getLoanById(loanId);
+      const loan = await loanService.getLoanById(params.loanId);
 
       if (!loan) {
+        set.status = 404;
         return {
           success: false,
           error: 'Loan not found',
@@ -265,21 +290,24 @@ export class LoanController {
       }
 
       // Check authorization
-      if (loan.lenderUserId !== userId && loan.borrowerUserId !== userId) {
+      if (loan.lenderUserId !== user.id && loan.borrowerUserId !== user.id) {
+        set.status = 403;
         return {
           success: false,
           error: 'Not authorized to view payment history',
         };
       }
 
-      const payments = await loanService.getPaymentHistory(loanId);
+      const payments = await loanService.getPaymentHistory(params.loanId);
 
+      set.status = 200;
       return {
         success: true,
         data: payments,
       };
     } catch (error: any) {
       logger.error('Error getting payment history:', error);
+      set.status = 500;
       return {
         success: false,
         error: error.message || 'Failed to get payment history',
@@ -288,11 +316,14 @@ export class LoanController {
   }
 
   // Delete loan
-  static async deleteLoan(loanId: string, userId: string) {
+  static async deleteLoan(context: any) {
+    const { user, params, set } = context;
+
     try {
-      const loan = await loanService.getLoanById(loanId);
+      const loan = await loanService.getLoanById(params.loanId);
 
       if (!loan) {
+        set.status = 404;
         return {
           success: false,
           error: 'Loan not found',
@@ -300,21 +331,24 @@ export class LoanController {
       }
 
       // Check authorization
-      if (loan.lenderUserId !== userId && loan.borrowerUserId !== userId) {
+      if (loan.lenderUserId !== user.id && loan.borrowerUserId !== user.id) {
+        set.status = 403;
         return {
           success: false,
           error: 'Not authorized to delete this loan',
         };
       }
 
-      await loanService.deleteLoan(loanId);
+      await loanService.deleteLoan(params.loanId);
 
+      set.status = 200;
       return {
         success: true,
         message: 'Loan deleted successfully',
       };
     } catch (error: any) {
       logger.error('Error deleting loan:', error);
+      set.status = 500;
       return {
         success: false,
         error: error.message || 'Failed to delete loan',
@@ -324,4 +358,3 @@ export class LoanController {
 }
 
 export default LoanController;
-

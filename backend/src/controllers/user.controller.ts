@@ -5,27 +5,32 @@ import logger from '../utils/logger';
 
 export class UserController {
   // Get current user profile
-  static async getCurrentUser(userId: string) {
+  static async getCurrentUser(context: any) {
+    const { user, set } = context;
+    
     try {
       // Get Better Auth user from database
       const usersCollection = mongoose.connection.db?.collection('user');
       if (!usersCollection) {
+        set.status = 500;
         return {
           success: false,
           error: 'Database not connected',
         };
       }
-      const betterAuthUser = await usersCollection.findOne({ id: userId });
+      const betterAuthUser = await usersCollection.findOne({ id: user.id });
       
       if (!betterAuthUser) {
+        set.status = 404;
         return {
           success: false,
           error: 'User not found',
         };
       }
       
-      const profile = await authService.getUserProfile(userId);
+      const profile = await authService.getUserProfile(user.id);
 
+      set.status = 200;
       return {
         success: true,
         data: {
@@ -41,6 +46,7 @@ export class UserController {
       };
     } catch (error: any) {
       logger.error('Error getting user profile:', error);
+      set.status = 500;
       return {
         success: false,
         error: error.message || 'Failed to get user profile',
@@ -49,32 +55,36 @@ export class UserController {
   }
 
   // Update current user profile
-  static async updateCurrentUser(userId: string, data: { name?: string; profilePicture?: string }) {
+  static async updateCurrentUser(context: any) {
+    const { user, body, set } = context;
+    
     try {
-      const { name, profilePicture } = data;
+      const { name, profilePicture } = body;
 
       // Update Better Auth user name if provided
       if (name) {
         const usersCollection = mongoose.connection.db?.collection('user');
         if (usersCollection) {
           await usersCollection.updateOne(
-            { id: userId },
+            { id: user.id },
             { $set: { name } }
           );
         }
       }
 
       // Update extended profile
-      const updatedProfile = await authService.updateUserProfile(userId, {
+      const updatedProfile = await authService.updateUserProfile(user.id, {
         profilePicture,
       });
 
+      set.status = 200;
       return {
         success: true,
         data: updatedProfile,
       };
     } catch (error: any) {
       logger.error('Error updating user profile:', error);
+      set.status = 500;
       return {
         success: false,
         error: error.message || 'Failed to update user profile',
@@ -83,15 +93,19 @@ export class UserController {
   }
 
   // Register device token for push notifications
-  static async registerDeviceToken(userId: string, token: string) {
+  static async registerDeviceToken(context: any) {
+    const { user, body, set } = context;
+    
     try {
-      await authService.registerDeviceToken(userId, token);
+      await authService.registerDeviceToken(user.id, body.token);
+      set.status = 200;
       return {
         success: true,
         message: 'Device token registered',
       };
     } catch (error: any) {
       logger.error('Error registering device token:', error);
+      set.status = 500;
       return {
         success: false,
         error: error.message || 'Failed to register device token',
@@ -100,9 +114,12 @@ export class UserController {
   }
 
   // Search users
-  static async searchUsers(query: string) {
+  static async searchUsers(context: any) {
+    const { query, set } = context;
+    
     try {
-      if (!query || query.length < 2) {
+      if (!query.q || query.q.length < 2) {
+        set.status = 400;
         return {
           success: false,
           error: 'Search query must be at least 2 characters',
@@ -112,6 +129,7 @@ export class UserController {
       // Search in Better Auth users collection
       const usersCollection = mongoose.connection.db?.collection('user');
       if (!usersCollection) {
+        set.status = 500;
         return {
           success: false,
           error: 'Database not connected',
@@ -121,13 +139,14 @@ export class UserController {
       const users = await usersCollection
         .find({
           $or: [
-            { name: { $regex: query, $options: 'i' } },
-            { email: { $regex: query, $options: 'i' } },
+            { name: { $regex: query.q, $options: 'i' } },
+            { email: { $regex: query.q, $options: 'i' } },
           ],
         })
         .limit(20)
         .toArray();
 
+      set.status = 200;
       return {
         success: true,
         data: users.map((u: any) => ({
@@ -139,6 +158,7 @@ export class UserController {
       };
     } catch (error: any) {
       logger.error('Error searching users:', error);
+      set.status = 500;
       return {
         success: false,
         error: error.message || 'Failed to search users',
@@ -147,19 +167,23 @@ export class UserController {
   }
 
   // Get user by ID
-  static async getUserById(userId: string) {
+  static async getUserById(context: any) {
+    const { params, set } = context;
+    
     try {
       // Get user from Better Auth
       const usersCollection = mongoose.connection.db?.collection('user');
       if (!usersCollection) {
+        set.status = 500;
         return {
           success: false,
           error: 'Database not connected',
         };
       }
-      const betterAuthUser = await usersCollection.findOne({ id: userId });
+      const betterAuthUser = await usersCollection.findOne({ id: params.userId });
 
       if (!betterAuthUser) {
+        set.status = 404;
         return {
           success: false,
           error: 'User not found',
@@ -167,8 +191,9 @@ export class UserController {
       }
 
       // Get extended profile
-      const profile = await authService.getUserProfile(userId);
+      const profile = await authService.getUserProfile(params.userId);
 
+      set.status = 200;
       return {
         success: true,
         data: {
@@ -182,6 +207,7 @@ export class UserController {
       };
     } catch (error: any) {
       logger.error('Error getting user by ID:', error);
+      set.status = 500;
       return {
         success: false,
         error: error.message || 'Failed to get user',
@@ -191,4 +217,3 @@ export class UserController {
 }
 
 export default UserController;
-

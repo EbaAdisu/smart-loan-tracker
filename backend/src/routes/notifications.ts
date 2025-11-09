@@ -10,9 +10,7 @@ export const notificationRoutes = new Elysia({ prefix: '/notifications' })
   .get(
     '/',
     async (context: any) => {
-      const { user, query } = context;
-      const limit = query.limit ? parseInt(query.limit) : 50;
-      return NotificationController.getUserNotifications(user.id, limit);
+      return NotificationController.getUserNotifications(context);
     },
     {
       query: t.Object({
@@ -23,22 +21,14 @@ export const notificationRoutes = new Elysia({ prefix: '/notifications' })
 
   // Get unread notification count
   .get('/unread-count', async (context: any) => {
-    const { user } = context;
-    return NotificationController.getUnreadCount(user.id);
+    return NotificationController.getUnreadCount(context);
   })
 
   // Mark notification as read
   .post(
     '/mark-read',
     async (context: any) => {
-      const { user, body, set } = context;
-      const result = await NotificationController.markAsRead(body.notificationId, user.id);
-      
-      if (!result.success) {
-        set.status = 400;
-      }
-      
-      return result;
+      return NotificationController.markAsRead(context);
     },
     {
       body: t.Object({

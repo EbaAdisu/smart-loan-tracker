@@ -8,22 +8,14 @@ export const userRoutes = new Elysia({ prefix: '/users' })
 
   // Get current user profile
   .get('/me', async (context: any) => {
-    const { user } = context;
-    return UserController.getCurrentUser(user.id);
+    return UserController.getCurrentUser(context);
   })
 
   // Update current user profile
   .put(
     '/me',
     async (context: any) => {
-      const { user, body, set } = context;
-      const result = await UserController.updateCurrentUser(user.id, body);
-      
-      if (!result.success) {
-        set.status = 400;
-      }
-      
-      return result;
+      return UserController.updateCurrentUser(context);
     },
     {
       body: t.Object({
@@ -37,14 +29,7 @@ export const userRoutes = new Elysia({ prefix: '/users' })
   .post(
     '/device-token',
     async (context: any) => {
-      const { user, body, set } = context;
-      const result = await UserController.registerDeviceToken(user.id, body.token);
-      
-      if (!result.success) {
-        set.status = 400;
-      }
-      
-      return result;
+      return UserController.registerDeviceToken(context);
     },
     {
       body: t.Object({
@@ -57,8 +42,7 @@ export const userRoutes = new Elysia({ prefix: '/users' })
   .get(
     '/search',
     async (context: any) => {
-      const { query } = context;
-      return UserController.searchUsers(query.q);
+      return UserController.searchUsers(context);
     },
     {
       query: t.Object({
@@ -69,14 +53,7 @@ export const userRoutes = new Elysia({ prefix: '/users' })
 
   // Get user by ID
   .get('/:userId', async (context: any) => {
-    const { params, set } = context;
-    const result = await UserController.getUserById(params.userId);
-    
-    if (!result.success) {
-      set.status = result.error === 'User not found' ? 404 : 400;
-    }
-    
-    return result;
+    return UserController.getUserById(context);
   });
 
 export default userRoutes;

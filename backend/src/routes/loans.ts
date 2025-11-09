@@ -11,22 +11,7 @@ export const loanRoutes = new Elysia({ prefix: '/loans' })
   .post(
     '/',
     async (context: any) => {
-      const { user, body, set } = context;
-      const result = await LoanController.createLoan(user.id, {
-        lenderUserId: body.lenderUserId,
-        borrowerUserId: body.borrowerUserId,
-        lenderName: body.lenderName,
-        borrowerName: body.borrowerName,
-        amount: body.amount,
-        reason: body.reason,
-        dueDate: new Date(body.dueDate),
-      });
-      
-      if (!result.success) {
-        set.status = 400;
-      }
-      
-      return result;
+      return LoanController.createLoan(context);
     },
     {
       body: t.Object({
@@ -45,11 +30,7 @@ export const loanRoutes = new Elysia({ prefix: '/loans' })
   .get(
     '/',
     async (context: any) => {
-      const { user, query } = context;
-      return LoanController.getUserLoans(user.id, {
-        status: query.status,
-        role: query.role,
-      });
+      return LoanController.getUserLoans(context);
     },
     {
       query: t.Object({
@@ -61,34 +42,14 @@ export const loanRoutes = new Elysia({ prefix: '/loans' })
 
   // Get loan by ID
   .get('/:loanId', async (context: any) => {
-    const { user, params, set } = context;
-    const result = await LoanController.getLoanById(params.loanId, user.id);
-    
-    if (!result.success) {
-      set.status = result.error === 'Loan not found' ? 404 : 403;
-    }
-    
-    return result;
+    return LoanController.getLoanById(context);
   })
 
   // Update loan
   .put(
     '/:loanId',
     async (context: any) => {
-      const { user, params, body, set } = context;
-      const result = await LoanController.updateLoan(params.loanId, user.id, {
-        status: body.status,
-        amount: body.amount,
-        reason: body.reason,
-        dueDate: body.dueDate ? new Date(body.dueDate) : undefined,
-        balanceRemaining: body.balanceRemaining,
-      });
-      
-      if (!result.success) {
-        set.status = result.error === 'Loan not found' ? 404 : 403;
-      }
-      
-      return result;
+      return LoanController.updateLoan(context);
     },
     {
       body: t.Object({
@@ -103,32 +64,14 @@ export const loanRoutes = new Elysia({ prefix: '/loans' })
 
   // Accept loan request
   .post('/:loanId/accept', async (context: any) => {
-    const { user, params, set } = context;
-    const result = await LoanController.acceptLoan(params.loanId, user.id);
-    
-    if (!result.success) {
-      set.status = 400;
-    }
-    
-    return result;
+    return LoanController.acceptLoan(context);
   })
 
   // Record payment
   .post(
     '/:loanId/payments',
     async (context: any) => {
-      const { user, params, body, set } = context;
-      const result = await LoanController.recordPayment(
-        params.loanId,
-        user.id,
-        body.amount
-      );
-      
-      if (!result.success) {
-        set.status = 400;
-      }
-      
-      return result;
+      return LoanController.recordPayment(context);
     },
     {
       body: t.Object({
@@ -139,26 +82,12 @@ export const loanRoutes = new Elysia({ prefix: '/loans' })
 
   // Get payment history for a loan
   .get('/:loanId/payments', async (context: any) => {
-    const { user, params, set } = context;
-    const result = await LoanController.getPaymentHistory(params.loanId, user.id);
-    
-    if (!result.success) {
-      set.status = result.error === 'Loan not found' ? 404 : 403;
-    }
-    
-    return result;
+    return LoanController.getPaymentHistory(context);
   })
 
   // Delete loan (soft delete)
   .delete('/:loanId', async (context: any) => {
-    const { user, params, set } = context;
-    const result = await LoanController.deleteLoan(params.loanId, user.id);
-    
-    if (!result.success) {
-      set.status = result.error === 'Loan not found' ? 404 : 403;
-    }
-    
-    return result;
+    return LoanController.deleteLoan(context);
   });
 
 export default loanRoutes;

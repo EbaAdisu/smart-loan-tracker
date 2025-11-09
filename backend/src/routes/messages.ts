@@ -8,31 +8,14 @@ export const messageRoutes = new Elysia({ prefix: '/messages' })
 
   // Get messages for a loan
   .get('/loans/:loanId', async (context: any) => {
-    const { user, params, set } = context;
-    const result = await MessageController.getLoanMessages(params.loanId, user.id);
-
-    if (!result.success) {
-      set.status = result.error === 'Loan not found' ? 404 : 403;
-    }
-
-    return result;
+    return MessageController.getLoanMessages(context);
   })
 
   // Send message
   .post(
     '/',
     async (context: any) => {
-      const { user, body, set } = context;
-      const result = await MessageController.sendMessage(user.id, {
-        loanId: body.loanId,
-        content: body.content,
-      });
-
-      if (!result.success) {
-        set.status = 400;
-      }
-
-      return result;
+      return MessageController.sendMessage(context);
     },
     {
       body: t.Object({
@@ -44,17 +27,14 @@ export const messageRoutes = new Elysia({ prefix: '/messages' })
 
   // Get unread message count
   .get('/unread-count', async (context: any) => {
-    const { user } = context;
-    return MessageController.getUnreadCount(user.id);
+    return MessageController.getUnreadCount(context);
   })
 
   // Get recent messages
   .get(
     '/recent',
     async (context: any) => {
-      const { user, query } = context;
-      const limit = query.limit ? parseInt(query.limit) : 10;
-      return MessageController.getRecentMessages(user.id, limit);
+      return MessageController.getRecentMessages(context);
     },
     {
       query: t.Object({

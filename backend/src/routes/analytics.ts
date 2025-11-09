@@ -8,22 +8,14 @@ export const analyticsRoutes = new Elysia({ prefix: '/analytics' })
 
   // Get overall summary
   .get('/summary', async (context: any) => {
-    const { user } = context;
-    return AnalyticsController.getSummary(user.id);
+    return AnalyticsController.getSummary(context);
   })
 
   // Get monthly breakdown
   .get(
     '/monthly',
     async (context: any) => {
-      const { user, query, set } = context;
-      const result = await AnalyticsController.getMonthlyBreakdown(user.id, query.month);
-
-      if (!result.success) {
-        set.status = 400;
-      }
-
-      return result;
+      return AnalyticsController.getMonthlyBreakdown(context);
     },
     {
       query: t.Object({
@@ -36,14 +28,7 @@ export const analyticsRoutes = new Elysia({ prefix: '/analytics' })
   .get(
     '/yearly',
     async (context: any) => {
-      const { user, query, set } = context;
-      const result = await AnalyticsController.getYearlySummary(user.id, query.year);
-
-      if (!result.success) {
-        set.status = 400;
-      }
-
-      return result;
+      return AnalyticsController.getYearlySummary(context);
     },
     {
       query: t.Object({
@@ -54,8 +39,7 @@ export const analyticsRoutes = new Elysia({ prefix: '/analytics' })
 
   // Get category breakdown
   .get('/categories', async (context: any) => {
-    const { user } = context;
-    return AnalyticsController.getCategoryBreakdown(user.id);
+    return AnalyticsController.getCategoryBreakdown(context);
   });
 
 export default analyticsRoutes;
