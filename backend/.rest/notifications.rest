@@ -1,0 +1,26 @@
+### Smart Loan Tracker API - Notification Endpoints
+@baseUrl = http://localhost:3000/api
+@authToken = your-auth-token-here
+@notificationId = notification-id-here
+
+### Get All Notifications
+GET {{baseUrl}}/notifications
+Authorization: Bearer {{authToken}}
+
+### Get All Notifications - With Limit
+GET {{baseUrl}}/notifications?limit=20
+Authorization: Bearer {{authToken}}
+
+### Get Unread Notification Count
+GET {{baseUrl}}/notifications/unread-count
+Authorization: Bearer {{authToken}}
+
+### Mark Notification as Read
+POST {{baseUrl}}/notifications/mark-read
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "notificationId": "{{notificationId}}"
+}
+

@@ -1,0 +1,74 @@
+### Smart Loan Tracker API - Loan Endpoints
+@baseUrl = http://localhost:3000/api
+@authToken = your-auth-token-here
+@loanId = loan-id-here
+
+### Create New Loan
+POST {{baseUrl}}/loans
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "lenderUserId": "lender-user-id",
+  "borrowerUserId": "borrower-user-id",
+  "lenderName": "John Doe",
+  "borrowerName": "Jane Smith",
+  "amount": 1000,
+  "reason": "Emergency loan",
+  "dueDate": "2024-12-31T00:00:00.000Z"
+}
+
+### Get All Loans (Current User)
+GET {{baseUrl}}/loans
+Authorization: Bearer {{authToken}}
+
+### Get All Loans - Filter by Status
+GET {{baseUrl}}/loans?status=active
+Authorization: Bearer {{authToken}}
+
+### Get All Loans - Filter by Role
+GET {{baseUrl}}/loans?role=lender
+Authorization: Bearer {{authToken}}
+
+### Get All Loans - Filter by Status and Role
+GET {{baseUrl}}/loans?status=active&role=borrower
+Authorization: Bearer {{authToken}}
+
+### Get Loan By ID
+GET {{baseUrl}}/loans/{{loanId}}
+Authorization: Bearer {{authToken}}
+
+### Update Loan
+PUT {{baseUrl}}/loans/{{loanId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "status": "active",
+  "amount": 1500,
+  "reason": "Updated reason",
+  "dueDate": "2025-01-31T00:00:00.000Z",
+  "balanceRemaining": 800
+}
+
+### Accept Loan Request
+POST {{baseUrl}}/loans/{{loanId}}/accept
+Authorization: Bearer {{authToken}}
+
+### Record Payment
+POST {{baseUrl}}/loans/{{loanId}}/payments
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "amount": 200
+}
+
+### Get Payment History
+GET {{baseUrl}}/loans/{{loanId}}/payments
+Authorization: Bearer {{authToken}}
+
+### Delete Loan
+DELETE {{baseUrl}}/loans/{{loanId}}
+Authorization: Bearer {{authToken}}
+

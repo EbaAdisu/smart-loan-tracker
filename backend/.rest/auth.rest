@@ -1,0 +1,42 @@
+### Smart Loan Tracker API - Auth Endpoints
+@baseUrl = http://localhost:3000/api
+@authToken = your-auth-token-here
+
+### Health Check
+GET {{baseUrl}}/../health
+
+### Better Auth - Sign Up
+POST {{baseUrl}}/auth/sign-up/email
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "password123",
+  "name": "John Doe"
+}
+
+### Better Auth - Sign In
+POST {{baseUrl}}/auth/sign-in/email
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+
+### Better Auth - Get Session
+GET {{baseUrl}}/auth/get-session
+Cookie: better-auth.session_token=your-session-token
+
+### Better Auth - Sign Out
+POST {{baseUrl}}/auth/sign-out
+Cookie: better-auth.session_token=your-session-token
+
+### Create User Profile (Callback)
+POST {{baseUrl}}/auth/signup/callback
+Content-Type: application/json
+
+{
+  "userId": "user-id-here"
+}
+

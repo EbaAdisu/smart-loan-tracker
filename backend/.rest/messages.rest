@@ -1,0 +1,31 @@
+### Smart Loan Tracker API - Message Endpoints
+@baseUrl = http://localhost:3000/api
+@authToken = your-auth-token-here
+@loanId = loan-id-here
+
+### Get Messages for Loan
+GET {{baseUrl}}/messages/loans/{{loanId}}
+Authorization: Bearer {{authToken}}
+
+### Send Message
+POST {{baseUrl}}/messages
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "loanId": "{{loanId}}",
+  "content": "Hello, when can you make the payment?"
+}
+
+### Get Unread Message Count
+GET {{baseUrl}}/messages/unread-count
+Authorization: Bearer {{authToken}}
+
+### Get Recent Messages
+GET {{baseUrl}}/messages/recent
+Authorization: Bearer {{authToken}}
+
+### Get Recent Messages - With Limit
+GET {{baseUrl}}/messages/recent?limit=20
+Authorization: Bearer {{authToken}}
+

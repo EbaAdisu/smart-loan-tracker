@@ -1,0 +1,35 @@
+### Smart Loan Tracker API - User Endpoints
+@baseUrl = http://localhost:3000/api
+@authToken = your-auth-token-here
+
+### Get Current User Profile
+GET {{baseUrl}}/users/me
+Authorization: Bearer {{authToken}}
+
+### Update Current User Profile
+PUT {{baseUrl}}/users/me
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Updated Name",
+  "profilePicture": "https://example.com/avatar.jpg"
+}
+
+### Register Device Token
+POST {{baseUrl}}/users/device-token
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "token": "expo-push-token-here"
+}
+
+### Search Users
+GET {{baseUrl}}/users/search?q=john
+Authorization: Bearer {{authToken}}
+
+### Get User By ID
+GET {{baseUrl}}/users/user-id-here
+Authorization: Bearer {{authToken}}
+
