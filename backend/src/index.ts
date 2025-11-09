@@ -6,6 +6,7 @@ import { env } from './config/env';
 import { connectDatabase } from './config/database';
 import { validationMiddleware } from './middleware/validation.middleware';
 import { errorMiddleware } from './middleware/error.middleware';
+import { requestLoggerMiddleware } from './middleware/request-logger.middleware';
 import logger from './utils/logger';
 import CronJobs from './jobs/cron';
 import { createServer } from 'http';
@@ -46,6 +47,7 @@ const app = new Elysia()
       },
     })
   )
+  .use(requestLoggerMiddleware)
   .use(validationMiddleware)
   .use(errorMiddleware)
 
