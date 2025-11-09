@@ -8,6 +8,7 @@ export class AppError extends Error {
     super(message);
     this.statusCode = statusCode;
     this.isOperational = true;
+    this.name = this.constructor.name;
     
     Error.captureStackTrace(this, this.constructor);
   }
@@ -58,6 +59,30 @@ export class InternalServerError extends AppError {
   }
 }
 
+export class PaymentError extends AppError {
+  constructor(message: string = 'Payment error') {
+    super(message, 400);
+  }
+}
+
+export class LoanError extends AppError {
+  constructor(message: string = 'Loan error') {
+    super(message, 400);
+  }
+}
+
+export class DatabaseError extends AppError {
+  constructor(message: string = 'Database error') {
+    super(message, 500);
+  }
+}
+
+export class ServiceUnavailableError extends AppError {
+  constructor(message: string = 'Service unavailable') {
+    super(message, 503);
+  }
+}
+
 // Error response formatter
 export function formatErrorResponse(error: Error | AppError) {
   if (error instanceof AppError) {
@@ -66,6 +91,7 @@ export function formatErrorResponse(error: Error | AppError) {
       error: {
         message: error.message,
         statusCode: error.statusCode,
+        code: error.name,
         ...(error instanceof ValidationError && { errors: error.errors }),
       },
     };
@@ -77,18 +103,19 @@ export function formatErrorResponse(error: Error | AppError) {
     error: {
       message: 'An unexpected error occurred',
       statusCode: 500,
+      code: 'InternalServerError',
     },
   };
 }
 
-// Async handler wrapper to catch errors
+// Async handler wrapper (like express-async-handler)
 export function asyncHandler(fn: Function) {
   return async (...args: any[]) => {
     try {
       return await fn(...args);
     } catch (error) {
+      // Re-throw to let global handler catch it
       throw error;
     }
   };
 }
-

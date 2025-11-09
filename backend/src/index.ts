@@ -5,6 +5,7 @@ import { swagger } from '@elysiajs/swagger';
 import { env } from './config/env';
 import { connectDatabase } from './config/database';
 import { validationMiddleware } from './middleware/validation.middleware';
+import { errorMiddleware } from './middleware/error.middleware';
 import logger from './utils/logger';
 import CronJobs from './jobs/cron';
 import { createServer } from 'http';
@@ -46,6 +47,7 @@ const app = new Elysia()
     })
   )
   .use(validationMiddleware)
+  .use(errorMiddleware)
 
   // Health check endpoint
   .get('/', () => ({
@@ -74,35 +76,7 @@ const app = new Elysia()
   )
 
   // WebSocket
-  .use(websocketHandler)
-
-  // Global error handler
-  .onError(({ code, error, set }) => {
-    logger.error(`Error [${code}]:`, error);
-
-    if (code === 'NOT_FOUND') {
-      set.status = 404;
-      return {
-        success: false,
-        error: 'Endpoint not found',
-      };
-    }
-
-    if (code === 'VALIDATION') {
-      set.status = 422;
-      return {
-        success: false,
-        error: 'Validation failed',
-        details: error,
-      };
-    }
-
-    set.status = 500;
-    return {
-      success: false,
-      error: 'Internal server error',
-    };
-  });
+  .use(websocketHandler);
 
 // Start server
 async function startServer() {
