@@ -1,27 +1,15 @@
 // Analytics routes
 import { Elysia, t } from 'elysia';
 import { authMiddleware } from '../middleware/auth.middleware';
-import analyticsService from '../services/analytics.service';
+import AnalyticsController from '../controllers/analytics.controller';
 
 export const analyticsRoutes = new Elysia({ prefix: '/analytics' })
   .use(authMiddleware)
 
   // Get overall summary
   .get('/summary', async (context: any) => {
-    try {
-      const { user } = context;
-      const summary = await analyticsService.getSummary(user.id);
-
-      return {
-        success: true,
-        data: summary,
-      };
-    } catch (error: any) {
-      return {
-        success: false,
-        error: error.message || 'Failed to get analytics summary',
-      };
-    }
+    const { user } = context;
+    return AnalyticsController.getSummary(user.id);
   })
 
   // Get monthly breakdown
@@ -29,32 +17,13 @@ export const analyticsRoutes = new Elysia({ prefix: '/analytics' })
     '/monthly',
     async (context: any) => {
       const { user, query, set } = context;
-      try {
-        const { month } = query;
+      const result = await AnalyticsController.getMonthlyBreakdown(user.id, query.month);
 
-        // Validate month format (YYYY-MM)
-        const monthRegex = /^\d{4}-(0[1-9]|1[0-2])$/;
-        if (!monthRegex.test(month)) {
-          set.status = 400;
-          return {
-            success: false,
-            error: 'Invalid month format. Use YYYY-MM',
-          };
-        }
-
-        const breakdown = await analyticsService.getMonthlyBreakdown(user.id, month);
-
-        return {
-          success: true,
-          data: breakdown,
-        };
-      } catch (error: any) {
+      if (!result.success) {
         set.status = 400;
-        return {
-          success: false,
-          error: error.message || 'Failed to get monthly breakdown',
-        };
       }
+
+      return result;
     },
     {
       query: t.Object({
@@ -68,31 +37,13 @@ export const analyticsRoutes = new Elysia({ prefix: '/analytics' })
     '/yearly',
     async (context: any) => {
       const { user, query, set } = context;
-      try {
-        const { year } = query;
+      const result = await AnalyticsController.getYearlySummary(user.id, query.year);
 
-        const yearNum = parseInt(year);
-        if (isNaN(yearNum) || yearNum < 2000 || yearNum > 2100) {
-          set.status = 400;
-          return {
-            success: false,
-            error: 'Invalid year',
-          };
-        }
-
-        const summary = await analyticsService.getYearlySummary(user.id, yearNum);
-
-        return {
-          success: true,
-          data: summary,
-        };
-      } catch (error: any) {
+      if (!result.success) {
         set.status = 400;
-        return {
-          success: false,
-          error: error.message || 'Failed to get yearly summary',
-        };
       }
+
+      return result;
     },
     {
       query: t.Object({
@@ -103,21 +54,8 @@ export const analyticsRoutes = new Elysia({ prefix: '/analytics' })
 
   // Get category breakdown
   .get('/categories', async (context: any) => {
-    try {
-      const { user } = context;
-      const categories = await analyticsService.getCategoryBreakdown(user.id);
-
-      return {
-        success: true,
-        data: categories,
-      };
-    } catch (error: any) {
-      return {
-        success: false,
-        error: error.message || 'Failed to get category breakdown',
-      };
-    }
+    const { user } = context;
+    return AnalyticsController.getCategoryBreakdown(user.id);
   });
 
 export default analyticsRoutes;
-

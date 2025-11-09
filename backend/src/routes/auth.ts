@@ -1,25 +1,30 @@
 // Auth routes - Better Auth integration
 import { Elysia, t } from 'elysia';
-import { getAuth } from '../config/auth';
-import authService from '../services/auth.service';
+import AuthController from '../controllers/auth.controller';
 
 export const authRoutes = new Elysia({ prefix: '/auth' })
   // Better Auth handles all auth endpoints via its own routes
   .all('/*', async ({ request }) => {
-    const auth = getAuth();
-    return auth.handler(request);
+    return AuthController.handleAuthRequest(request);
   })
   // Hook: Create user profile after successful signup
-  .post('/signup/callback', async ({ body }) => {
-    try {
+  .post(
+    '/signup/callback',
+    async ({ body, set }) => {
       const { userId } = body as { userId: string };
-      await authService.createUserProfile(userId);
-      return { success: true, message: 'User profile created' };
-    } catch (error) {
-      console.error('Error creating user profile:', error);
-      return { success: false, error: 'Failed to create user profile' };
+      const result = await AuthController.createUserProfile(userId);
+      
+      if (!result.success) {
+        set.status = 400;
+      }
+      
+      return result;
+    },
+    {
+      body: t.Object({
+        userId: t.String(),
+      }),
     }
-  });
+  );
 
 export default authRoutes;
-

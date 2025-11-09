@@ -1,107 +1,50 @@
 // Notification routes
 import { Elysia, t } from 'elysia';
 import { authMiddleware } from '../middleware/auth.middleware';
-import notificationService from '../services/notification.service';
-import { NotificationType } from '../models/Notification';
+import NotificationController from '../controllers/notification.controller';
 
 export const notificationRoutes = new Elysia({ prefix: '/notifications' })
   .use(authMiddleware)
 
-  // Get user notifications
-  .get('/', async (context: any) => {
-    const { user, body, set, params, query, headers, request } = context;
-    try {
-      const { read, type, limit } = query;
-
-      const notifications = await notificationService.getUserNotifications(user.id, {
-        read: read ? read === 'true' : undefined,
-        type: type as NotificationType,
-        limit: limit ? parseInt(limit) : 50,
-      });
-
-      return {
-        success: true,
-        data: notifications,
-      };
-    } catch (error: any) {
-      return {
-        success: false,
-        error: error.message || 'Failed to get notifications',
-      };
+  // Get all notifications
+  .get(
+    '/',
+    async (context: any) => {
+      const { user, query } = context;
+      const limit = query.limit ? parseInt(query.limit) : 50;
+      return NotificationController.getUserNotifications(user.id, limit);
+    },
+    {
+      query: t.Object({
+        limit: t.Optional(t.String()),
+      }),
     }
-  })
+  )
 
-  // Get unread count
+  // Get unread notification count
   .get('/unread-count', async (context: any) => {
-    const { user, body, set, params, query, headers, request } = context;
-    try {
-      const count = await notificationService.getUnreadCount(user.id);
-
-      return {
-        success: true,
-        data: { count },
-      };
-    } catch (error: any) {
-      return {
-        success: false,
-        error: error.message || 'Failed to get unread count',
-      };
-    }
+    const { user } = context;
+    return NotificationController.getUnreadCount(user.id);
   })
 
   // Mark notification as read
-  .put('/:id/read', async ({ params, set }) => {
-    try {
-      const notification = await notificationService.markAsRead(params.id);
-
-      return {
-        success: true,
-        data: notification,
-      };
-    } catch (error: any) {
-      set.status = 404;
-      return {
-        success: false,
-        error: error.message || 'Failed to mark notification as read',
-      };
+  .post(
+    '/mark-read',
+    async (context: any) => {
+      const { user, body, set } = context;
+      const result = await NotificationController.markAsRead(body.notificationId, user.id);
+      
+      if (!result.success) {
+        set.status = 400;
+      }
+      
+      return result;
+    },
+    {
+      body: t.Object({
+        notificationId: t.String({ minLength: 1 }),
+      }),
     }
-  })
-
-  // Mark all notifications as read
-  .put('/read-all', async (context: any) => {
-    const { user, body, set, params, query, headers, request } = context;
-    try {
-      await notificationService.markAllAsRead(user.id);
-
-      return {
-        success: true,
-        message: 'All notifications marked as read',
-      };
-    } catch (error: any) {
-      return {
-        success: false,
-        error: error.message || 'Failed to mark all notifications as read',
-      };
-    }
-  })
-
-  // Delete notification
-  .delete('/:id', async ({ params, set }) => {
-    try {
-      await notificationService.deleteNotification(params.id);
-
-      return {
-        success: true,
-        message: 'Notification deleted',
-      };
-    } catch (error: any) {
-      set.status = 404;
-      return {
-        success: false,
-        error: error.message || 'Failed to delete notification',
-      };
-    }
-  });
+  );
 
 export default notificationRoutes;
-
