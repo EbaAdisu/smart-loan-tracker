@@ -116,20 +116,20 @@ mobile/
 ## 🔐 Authentication Flow
 
 ### Better Auth Integration
-1. **Signup:** `POST /api/auth/signup` (email, password, name)
-2. **Login:** `POST /api/auth/login` (email, password)
-3. **Session:** `GET /api/auth/session` (check if logged in)
-4. **Logout:** `POST /api/auth/logout`
+- [ ] **Signup:** `POST /api/auth/signup` (email, password, name)
+- [ ] **Login:** `POST /api/auth/login` (email, password)
+- [ ] **Session:** `GET /api/auth/session` (check if logged in)
+- [ ] **Logout:** `POST /api/auth/logout`
 
 ### Token Storage
-- Store session token in **Expo SecureStore**
-- Auto-refresh session on app start
-- Clear token on logout
+- [ ] Store session token in **Expo SecureStore**
+- [ ] Auto-refresh session on app start
+- [ ] Clear token on logout
 
 ### Auth State Management
-- Redux slice for auth state (isAuthenticated, user, token)
-- Protected routes using navigation guards
-- Auto-redirect to login if session expired
+- [ ] Redux slice for auth state (isAuthenticated, user, token)
+- [ ] Protected routes using navigation guards
+- [ ] Auto-redirect to login if session expired
 
 ---
 
@@ -138,139 +138,140 @@ mobile/
 ### 1. Auth Screens
 
 #### LoginScreen
-- Email input
-- Password input
-- "Forgot Password?" link
-- Login button
-- "Don't have account? Sign up" link
+- [ ] Email input
+- [ ] Password input
+- [ ] "Forgot Password?" link
+- [ ] Login button
+- [ ] "Don't have account? Sign up" link
 
 #### SignupScreen
-- Name input
-- Email input
-- Password input
-- Confirm password input
-- Signup button
-- "Already have account? Login" link
+- [ ] Name input
+- [ ] Email input
+- [ ] Password input
+- [ ] Confirm password input
+- [ ] Signup button
+- [ ] "Already have account? Login" link
 
 #### ForgotPasswordScreen
-- Email input
-- Send reset link button
+- [ ] Email input
+- [ ] Send reset link button
 
 ---
 
 ### 2. Loan Screens
 
 #### LoanListScreen
-- List of all loans (given + received)
-- Filter tabs: "All", "Given", "Received", "Active", "Overdue"
-- Search bar
-- Pull to refresh
-- "Create Loan" FAB button
-- Each loan shows: name, amount, status, due date
+- [ ] List of all loans (given + received)
+- [ ] Filter tabs: "All", "Given", "Received", "Active", "Overdue"
+- [ ] Search bar
+- [ ] Pull to refresh
+- [ ] "Create Loan" FAB button
+- [ ] Each loan shows: name, amount, status, due date
 
 #### LoanDetailScreen
-- Loan details (lender, borrower, amount, reason, dates)
-- Status badge
-- Payment history list
-- "Record Payment" button
-- "Edit Loan" button (if owner)
-- "Send Message" button
-- Payment progress indicator
+- [ ] Loan details (lender, borrower, amount, reason, dates)
+- [ ] Status badge
+- [ ] Payment history list
+- [ ] "Record Payment" button
+- [ ] "Edit Loan" button (if owner)
+- [ ] "Send Message" button
+- [ ] Payment progress indicator
 
 #### CreateLoanScreen
-- Form fields:
-  - Borrower selection (search users)
-  - Amount input
-  - Reason input
-  - Due date picker
-- Validation
-- Submit button
+- [ ] Form fields:
+  - [ ] Borrower selection (search users)
+  - [ ] Amount input
+  - [ ] Reason input
+  - [ ] Due date picker
+- [ ] Validation
+- [ ] Submit button
 
 #### EditLoanScreen
-- Pre-filled form
-- Update amount, reason, due date, status
-- Save button
+- [ ] Pre-filled form
+- [ ] Update amount, reason, due date, status
+- [ ] Save button
 
 ---
 
 ### 3. Payment Screens
 
 #### RecordPaymentScreen
-- Loan info display
-- Amount input
-- Notes input (optional)
-- Submit button
-- Updates loan balance automatically
+- [ ] Loan info display
+- [ ] Amount input
+- [ ] Notes input (optional)
+- [ ] Submit button
+- [ ] Updates loan balance automatically
 
 ---
 
 ### 4. Analytics Screens
 
 #### AnalyticsScreen
-- Summary cards:
-  - Total Given
-  - Total Received
-  - Net Position (positive/negative)
-  - Active Loans Count
-- Monthly chart
-- Yearly summary
-- Category breakdown
-- Time period selector (monthly/yearly)
+- [ ] Summary cards:
+  - [ ] Total Given
+  - [ ] Total Received
+  - [ ] Net Position (positive/negative)
+  - [ ] Active Loans Count
+- [ ] Monthly chart
+- [ ] Yearly summary
+- [ ] Category breakdown
+- [ ] Time period selector (monthly/yearly)
 
 #### AnalyticsDetailScreen
-- Detailed breakdown by category
-- Loan list for selected category
-- Export option (future)
+- [ ] Detailed breakdown by category
+- [ ] Loan list for selected category
+- [ ] Export option (future)
 
 ---
 
 ### 5. Message Screens
 
 #### MessageListScreen
-- List of loan conversations
-- Unread message indicator
-- Last message preview
-- Timestamp
-- Tap to open chat
+- [ ] List of loan conversations
+- [ ] Unread message indicator
+- [ ] Last message preview
+- [ ] Timestamp
+- [ ] Tap to open chat
 
 #### ChatScreen
-- Message list (scrollable)
-- Input field
-- Send button
-- Real-time updates (WebSocket)
-- Mark as read on open
+- [ ] Message list (scrollable)
+- [ ] Input field
+- [ ] Send button
+- [ ] Real-time updates (WebSocket)
+- [ ] Mark as read on open
 
 ---
 
 ### 6. Profile Screens
 
 #### ProfileScreen
-- User info (name, email, profile picture)
-- Statistics (total loans, net position)
-- Settings button
-- Logout button
+- [ ] User info (name, email, profile picture)
+- [ ] Statistics (total loans, net position)
+- [ ] Settings button
+- [ ] Logout button
 
 #### EditProfileScreen
-- Name input
-- Profile picture picker
-- Save button
+- [ ] Name input
+- [ ] Profile picture picker
+- [ ] Save button
 
 ---
 
 ### 7. Notification Screen
 
 #### NotificationsScreen
-- List of notifications
-- Unread indicator
-- Tap to navigate to related loan
-- Mark as read
-- Clear all button
+- [ ] List of notifications
+- [ ] Unread indicator
+- [ ] Tap to navigate to related loan
+- [ ] Mark as read
+- [ ] Clear all button
 
 ---
 
 ## 🔄 State Management (Redux Toolkit)
 
 ### Auth Slice
+- [ ] Implement auth slice
 ```typescript
 {
   isAuthenticated: boolean,
@@ -281,6 +282,7 @@ mobile/
 ```
 
 ### User Slice
+- [ ] Implement user slice
 ```typescript
 {
   profile: UserProfile | null,
@@ -289,6 +291,7 @@ mobile/
 ```
 
 ### Loan Slice
+- [ ] Implement loan slice
 ```typescript
 {
   loans: Loan[],
@@ -301,6 +304,7 @@ mobile/
 ```
 
 ### Notification Slice
+- [ ] Implement notification slice
 ```typescript
 {
   notifications: Notification[],
@@ -313,88 +317,88 @@ mobile/
 ## 🌐 API Integration (RTK Query)
 
 ### Base API Setup
-- Base URL: `process.env.EXPO_PUBLIC_API_URL`
-- Auth headers: Include session token
-- Error handling: Global error handler
-- Auto-refresh: Handle token refresh
+- [ ] Base URL: `process.env.EXPO_PUBLIC_API_URL`
+- [ ] Auth headers: Include session token
+- [ ] Error handling: Global error handler
+- [ ] Auto-refresh: Handle token refresh
 
 ### API Endpoints
 
 #### Auth API
-- `signup` - Create account
-- `login` - Login
-- `logout` - Logout
-- `getSession` - Get current session
+- [ ] `signup` - Create account
+- [ ] `login` - Login
+- [ ] `logout` - Logout
+- [ ] `getSession` - Get current session
 
 #### User API
-- `getProfile` - Get user profile
-- `updateProfile` - Update profile
-- `searchUsers` - Search users by name/email
-- `registerDeviceToken` - Register push token
+- [ ] `getProfile` - Get user profile
+- [ ] `updateProfile` - Update profile
+- [ ] `searchUsers` - Search users by name/email
+- [ ] `registerDeviceToken` - Register push token
 
 #### Loan API
-- `getLoans` - Get all loans
-- `getLoan` - Get loan by ID
-- `createLoan` - Create new loan
-- `updateLoan` - Update loan
-- `deleteLoan` - Delete loan
+- [ ] `getLoans` - Get all loans
+- [ ] `getLoan` - Get loan by ID
+- [ ] `createLoan` - Create new loan
+- [ ] `updateLoan` - Update loan
+- [ ] `deleteLoan` - Delete loan
 
 #### Payment API
-- `recordPayment` - Record payment
+- [ ] `recordPayment` - Record payment
 
 #### Analytics API
-- `getSummary` - Get analytics summary
-- `getMonthly` - Get monthly analytics
-- `getYearly` - Get yearly analytics
-- `getCategories` - Get category breakdown
+- [ ] `getSummary` - Get analytics summary
+- [ ] `getMonthly` - Get monthly analytics
+- [ ] `getYearly` - Get yearly analytics
+- [ ] `getCategories` - Get category breakdown
 
 #### Message API
-- `getMessages` - Get messages for loan
-- `sendMessage` - Send message
-- `markAsRead` - Mark message as read
+- [ ] `getMessages` - Get messages for loan
+- [ ] `sendMessage` - Send message
+- [ ] `markAsRead` - Mark message as read
 
 #### Notification API
-- `getNotifications` - Get notifications
-- `markAsRead` - Mark notification as read
-- `deleteNotification` - Delete notification
+- [ ] `getNotifications` - Get notifications
+- [ ] `markAsRead` - Mark notification as read
+- [ ] `deleteNotification` - Delete notification
 
 ---
 
 ## 🔔 Push Notifications
 
 ### Setup
-1. Request notification permissions
-2. Get Expo push token
-3. Register token with backend (`POST /api/users/device-token`)
-4. Listen for notifications
+- [ ] Request notification permissions
+- [ ] Get Expo push token
+- [ ] Register token with backend (`POST /api/users/device-token`)
+- [ ] Listen for notifications
 
 ### Notification Types
-- Loan due (3 days before)
-- Loan overdue
-- Payment received
-- New message
-- Loan status changed
+- [ ] Loan due (3 days before)
+- [ ] Loan overdue
+- [ ] Payment received
+- [ ] New message
+- [ ] Loan status changed
 
 ### Handling
-- Show local notification
-- Update Redux state
-- Navigate to relevant screen on tap
+- [ ] Show local notification
+- [ ] Update Redux state
+- [ ] Navigate to relevant screen on tap
 
 ---
 
 ## 💬 Real-time Chat (WebSocket)
 
 ### Setup
-1. Connect to WebSocket on app start (if authenticated)
-2. Listen for new messages
-3. Update message list in real-time
-4. Show notification badge
+- [ ] Connect to WebSocket on app start (if authenticated)
+- [ ] Listen for new messages
+- [ ] Update message list in real-time
+- [ ] Show notification badge
 
 ### Events
-- `new_message` - New message received
-- `message_read` - Message read by recipient
-- `user_online` - User came online
-- `user_offline` - User went offline
+- [ ] `new_message` - New message received
+- [ ] `message_read` - Message read by recipient
+- [ ] `user_online` - User came online
+- [ ] `user_offline` - User went offline
 
 ---
 
@@ -437,79 +441,79 @@ mobile/
 ## 🚀 Implementation Steps
 
 ### Step 1: Project Setup (1 hour)
-1. Initialize Expo project: `npx create-expo-app@latest`
-2. Install dependencies
-3. Setup TypeScript
-4. Create folder structure
-5. Setup navigation structure
+- [ ] Initialize Expo project: `npx create-expo-app@latest`
+- [ ] Install dependencies
+- [ ] Setup TypeScript
+- [ ] Create folder structure
+- [ ] Setup navigation structure
 
 ### Step 2: Better Auth Integration (2 hours)
-1. Create auth service (API calls)
-2. Setup Redux auth slice
-3. Create auth screens (Login, Signup)
-4. Setup navigation guards
-5. Test login/signup flow
+- [ ] Create auth service (API calls)
+- [ ] Setup Redux auth slice
+- [ ] Create auth screens (Login, Signup)
+- [ ] Setup navigation guards
+- [ ] Test login/signup flow
 
 ### Step 3: User Profile (2 hours)
-1. Create user API service
-2. Setup Redux user slice
-3. Create profile screens
-4. Implement profile update
-5. Test profile flow
+- [ ] Create user API service
+- [ ] Setup Redux user slice
+- [ ] Create profile screens
+- [ ] Implement profile update
+- [ ] Test profile flow
 
 ### Step 4: Loan List & Detail (3 hours)
-1. Create loan API service
-2. Setup Redux loan slice
-3. Create LoanListScreen
-4. Create LoanDetailScreen
-5. Implement filters and search
-6. Test loan display
+- [ ] Create loan API service
+- [ ] Setup Redux loan slice
+- [ ] Create LoanListScreen
+- [ ] Create LoanDetailScreen
+- [ ] Implement filters and search
+- [ ] Test loan display
 
 ### Step 5: Create/Edit Loan (2 hours)
-1. Create loan form (React Hook Form)
-2. User search/selection
-3. Date picker integration
-4. Form validation
-5. Submit to API
-6. Test create/edit flow
+- [ ] Create loan form (React Hook Form)
+- [ ] User search/selection
+- [ ] Date picker integration
+- [ ] Form validation
+- [ ] Submit to API
+- [ ] Test create/edit flow
 
 ### Step 6: Payment Recording (1 hour)
-1. Create payment API service
-2. Create RecordPaymentScreen
-3. Update loan balance
-4. Test payment flow
+- [ ] Create payment API service
+- [ ] Create RecordPaymentScreen
+- [ ] Update loan balance
+- [ ] Test payment flow
 
 ### Step 7: Analytics (3 hours)
-1. Create analytics API service
-2. Create AnalyticsScreen
-3. Implement charts (react-native-chart-kit or similar)
-4. Monthly/yearly views
-5. Category breakdown
-6. Test analytics display
+- [ ] Create analytics API service
+- [ ] Create AnalyticsScreen
+- [ ] Implement charts (react-native-chart-kit or similar)
+- [ ] Monthly/yearly views
+- [ ] Category breakdown
+- [ ] Test analytics display
 
 ### Step 8: Messaging (3 hours)
-1. Setup WebSocket connection
-2. Create message API service
-3. Create MessageListScreen
-4. Create ChatScreen
-5. Real-time message updates
-6. Test chat flow
+- [ ] Setup WebSocket connection
+- [ ] Create message API service
+- [ ] Create MessageListScreen
+- [ ] Create ChatScreen
+- [ ] Real-time message updates
+- [ ] Test chat flow
 
 ### Step 9: Notifications (2 hours)
-1. Setup Expo Notifications
-2. Request permissions
-3. Register device token
-4. Create NotificationsScreen
-5. Handle notification taps
-6. Test notifications
+- [ ] Setup Expo Notifications
+- [ ] Request permissions
+- [ ] Register device token
+- [ ] Create NotificationsScreen
+- [ ] Handle notification taps
+- [ ] Test notifications
 
 ### Step 10: Polish & Testing (3 hours)
-1. Add loading states
-2. Error handling
-3. Pull to refresh
-4. Offline handling (cache)
-5. UI/UX improvements
-6. Test all flows
+- [ ] Add loading states
+- [ ] Error handling
+- [ ] Pull to refresh
+- [ ] Offline handling (cache)
+- [ ] UI/UX improvements
+- [ ] Test all flows
 
 ---
 
@@ -526,66 +530,139 @@ mobile/
 ### Environment Variables
 ```env
 EXPO_PUBLIC_API_URL=http://localhost:3000/api
-EXPO_PUBLIC_WS_URL=ws://localhost:3000
+EXPO_PUBLIC_WS_URL=ws://localhost:3000/ws
 ```
 
 ### Authentication
-- All API calls include session token (Better Auth handles)
-- Token stored in SecureStore
-- Auto-refresh on 401 errors
+- Better Auth handles all auth endpoints
+- Session token stored in cookies (Better Auth manages)
+- Include cookies in requests (credentials: true)
+- Base URL: `http://localhost:3000/api/auth`
+
+### API Endpoints
+
+#### Auth (`/api/auth`)
+- `POST /auth/sign-up/email` - Signup (email, password, name)
+- `POST /auth/sign-in/email` - Login (email, password)
+- `POST /auth/sign-out` - Logout
+- `GET /auth/get-session` - Get current session
+- `POST /auth/signup/callback` - Create user profile (internal)
+
+#### Users (`/api/users`)
+- `GET /users/me` - Get current user profile
+- `PUT /users/me` - Update profile (name, profilePicture)
+- `POST /users/device-token` - Register push token (token)
+- `GET /users/search?q=query` - Search users
+- `GET /users/:userId` - Get user by ID
+
+#### Loans (`/api/loans`)
+- `POST /loans` - Create loan (lenderUserId, borrowerUserId, lenderName, borrowerName, amount, reason?, dueDate)
+- `GET /loans` - Get all loans (?status=, ?role=)
+- `GET /loans/:loanId` - Get loan by ID
+- `PUT /loans/:loanId` - Update loan (status?, amount?, reason?, dueDate?, balanceRemaining?)
+- `POST /loans/:loanId/accept` - Accept loan request
+- `POST /loans/:loanId/payments` - Record payment (amount)
+- `GET /loans/:loanId/payments` - Get payment history
+- `DELETE /loans/:loanId` - Delete loan
+
+#### Analytics (`/api/analytics`)
+- `GET /analytics/summary` - Get overall summary
+- `GET /analytics/monthly?month=YYYY-MM` - Get monthly breakdown
+- `GET /analytics/yearly?year=YYYY` - Get yearly summary
+- `GET /analytics/categories` - Get category breakdown
+
+#### Messages (`/api/messages`)
+- `GET /messages/loans/:loanId` - Get messages for loan
+- `POST /messages` - Send message (loanId, content)
+- `GET /messages/unread-count` - Get unread count
+- `GET /messages/recent?limit=10` - Get recent messages
+
+#### Notifications (`/api/notifications`)
+- `GET /notifications?limit=50` - Get all notifications
+- `GET /notifications/unread-count` - Get unread count
+- `POST /notifications/mark-read` - Mark as read (notificationId)
+
+### Response Format
+```typescript
+// Success
+{
+  success: true,
+  data: any
+}
+
+// Error
+{
+  success: false,
+  error: {
+    message: string,
+    statusCode: number,
+    code: string
+  }
+}
+```
+
+### Status Codes
+- `200` - Success (GET, PUT, DELETE)
+- `201` - Created (POST)
+- `400` - Bad Request
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Not Found
+- `422` - Validation Error
+- `500` - Server Error
 
 ---
 
 ## 📝 Key Features
 
 ### 1. Offline Support
-- Cache loans in AsyncStorage
-- Show cached data when offline
-- Sync when back online
+- [ ] Cache loans in AsyncStorage
+- [ ] Show cached data when offline
+- [ ] Sync when back online
 
 ### 2. Pull to Refresh
-- Loan list
-- Message list
-- Notifications
+- [ ] Loan list
+- [ ] Message list
+- [ ] Notifications
 
 ### 3. Search & Filter
-- Search loans by name/amount
-- Filter by status/type
-- Search users for loan creation
+- [ ] Search loans by name/amount
+- [ ] Filter by status/type
+- [ ] Search users for loan creation
 
 ### 4. Real-time Updates
-- New messages (WebSocket)
-- Loan status changes (polling or WebSocket)
-- Notifications (push)
+- [ ] New messages (WebSocket)
+- [ ] Loan status changes (polling or WebSocket)
+- [ ] Notifications (push)
 
 ### 5. Form Validation
-- React Hook Form + Zod
-- Client-side validation
-- Error messages
+- [ ] React Hook Form + Zod
+- [ ] Client-side validation
+- [ ] Error messages
 
 ---
 
 ## 🎨 UI/UX Guidelines
 
 ### Design System
-- Use React Native Paper theme
-- Consistent colors, spacing, typography
-- Dark mode support (optional)
+- [ ] Use React Native Paper theme
+- [ ] Consistent colors, spacing, typography
+- [ ] Dark mode support (optional)
 
 ### Navigation
-- Bottom tabs: Loans, Analytics, Messages, Profile
-- Stack navigation for details
-- Modal for create/edit
+- [ ] Bottom tabs: Loans, Analytics, Messages, Profile
+- [ ] Stack navigation for details
+- [ ] Modal for create/edit
 
 ### Loading States
-- Skeleton loaders
-- Loading spinners
-- Pull to refresh indicators
+- [ ] Skeleton loaders
+- [ ] Loading spinners
+- [ ] Pull to refresh indicators
 
 ### Error Handling
-- Toast messages for errors
-- Retry buttons
-- Empty states
+- [ ] Toast messages for errors
+- [ ] Retry buttons
+- [ ] Empty states
 
 ---
 
