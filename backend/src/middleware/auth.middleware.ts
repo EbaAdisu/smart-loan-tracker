@@ -1,6 +1,6 @@
 // Authentication middleware
 import { Elysia, type Context } from 'elysia';
-import { auth, type Session, type User } from '../config/auth';
+import { getAuth, type Session, type User } from '../config/auth';
 import { UnauthorizedError } from '../utils/errors';
 
 export interface AuthContext {
@@ -26,6 +26,7 @@ export const authMiddleware = new Elysia({ name: 'auth' })
       }
 
       // Verify session with Better Auth
+      const auth = getAuth();
       const session = await auth.api.getSession({
         headers: new Headers({
           cookie: `better-auth.session_token=${sessionToken}`,
@@ -60,6 +61,7 @@ export const optionalAuth = new Elysia({ name: 'optional-auth' })
         return { user: null, session: null };
       }
 
+      const auth = getAuth();
       const session = await auth.api.getSession({
         headers: new Headers({
           cookie: `better-auth.session_token=${sessionToken}`,

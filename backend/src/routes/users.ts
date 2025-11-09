@@ -2,7 +2,7 @@
 import { Elysia, t } from 'elysia';
 import { authMiddleware } from '../middleware/auth.middleware';
 import authService from '../services/auth.service';
-import { auth } from '../config/auth';
+import { getAuth } from '../config/auth';
 import mongoose from 'mongoose';
 
 export const userRoutes = new Elysia({ prefix: '/users' })

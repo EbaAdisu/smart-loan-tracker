@@ -7,6 +7,7 @@ import { connectDatabase } from './config/database';
 import { validationMiddleware } from './middleware/validation.middleware';
 import logger from './utils/logger';
 import CronJobs from './jobs/cron';
+import { createServer } from 'http';
 
 // Import routes
 import authRoutes from './routes/auth';
@@ -109,13 +110,33 @@ async function startServer() {
     // Connect to database
     await connectDatabase();
 
+    // Initialize Better Auth after DB connection
+    const { initializeAuth } = await import('./config/auth');
+    initializeAuth();
+    logger.info('✅ Better Auth initialized');
+
     // Start cron jobs
     CronJobs.startAll();
 
-    // Start server
-    app.listen(env.PORT);
+    // Create HTTP server with Elysia fetch handler
+    const server = createServer(async (req, res) => {
+      const response = await app.fetch(new Request(`http://${req.headers.host}${req.url}`, {
+        method: req.method,
+        headers: req.headers as Record<string, string>,
+        body: req.method !== 'GET' && req.method !== 'HEAD' ? (req as any) : undefined,
+      }));
 
-    logger.success(`
+      res.statusCode = response.status;
+      response.headers.forEach((value: string, key: string) => {
+        res.setHeader(key, value);
+      });
+
+      const buffer = await response.arrayBuffer();
+      res.end(Buffer.from(buffer));
+    });
+
+    server.listen(parseInt(env.PORT), () => {
+      logger.success(`
 ╔════════════════════════════════════════════════════════╗
 ║                                                        ║
 ║   🚀 Smart Loan Tracker Backend Started!              ║
@@ -126,9 +147,15 @@ async function startServer() {
 ║   Environment: ${env.NODE_ENV}                          ║
 ║                                                        ║
 ╚════════════════════════════════════════════════════════╝
-    `);
+      `);
+    });
   } catch (error) {
-    logger.error('Failed to start server', error);
+    logger.error('Failed to start server');
+    console.error('Error details:', error);
+    if (error instanceof Error) {
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    }
     process.exit(1);
   }
 }

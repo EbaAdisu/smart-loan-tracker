@@ -1,5 +1,5 @@
 // Authentication Service
-import { auth } from '../config/auth';
+import { getAuth } from '../config/auth';
 import { UserProfile } from '../models/User';
 import { ConflictError, NotFoundError } from '../utils/errors';
 import logger from '../utils/logger';
