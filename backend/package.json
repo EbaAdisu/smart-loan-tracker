@@ -1,31 +1,15 @@
 {
-  "name": "smart-loan-tracker-backend",
-  "version": "1.0.0",
-  "description": "Backend API for Smart Loan Tracker using Elysia.js, MongoDB, and Better Auth",
-  "main": "src/index.ts",
-  "type": "module",
+  "name": "backend",
+  "version": "1.0.50",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "start": "node dist/index.js",
-    "build": "tsc",
-    "test": "echo \"Tests not implemented yet\""
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
-    "@elysiajs/cors": "latest",
-    "@elysiajs/swagger": "latest",
-    "better-auth": "latest",
-    "dotenv": "^17.2.3",
-    "elysia": "latest",
-    "expo-server-sdk": "^3.7.0",
-    "mongodb": "^6.0.0",
-    "mongoose": "^8.0.0",
-    "node-cron": "^3.0.0",
-    "zod": "^3.22.0"
+    "elysia": "latest"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "@types/node-cron": "^3.0.0",
-    "tsx": "^4.7.0",
-    "typescript": "^5.0.0"
-  }
+    "bun-types": "latest"
+  },
+  "module": "src/index.js"
 }

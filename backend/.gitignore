@@ -1,47 +1,42 @@
-# Dependencies
-node_modules/
-.pnp
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
 .pnp.js
 
-# Build outputs
-dist/
-build/
-*.js.map
+# testing
+/coverage
 
-# Environment variables
-.env
-.env.local
-.env.production
+# next.js
+/.next/
+/out/
 
-# Logs
-logs/
-*.log
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-lerna-debug.log*
 
-# OS files
-.DS_Store
-Thumbs.db
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*.swn
+# vercel
+.vercel
 
-# Bun
-.bun/
-bun.lockb
-
-# Testing
-coverage/
-.nyc_output/
-
-# Temporary files
-tmp/
-temp/
-*.tmp
-
+**/*.trace
+**/*.zip
+**/*.tar.gz
+**/*.tgz
+**/*.log
+package-lock.json
+**/*.bun
