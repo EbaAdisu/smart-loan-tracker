@@ -1,20 +1,11 @@
 ### Smart Loan Tracker API - Analytics Endpoints
 @baseUrl = http://localhost:3000/api
-@authToken = your-auth-token-here
+@authToken = your-firebase-id-token-here
 
-### Get Overall Summary
-GET {{baseUrl}}/analytics/summary
+### Get My Stats
+GET {{baseUrl}}/analytics/me
 Authorization: Bearer {{authToken}}
 
-### Get Monthly Breakdown
-GET {{baseUrl}}/analytics/monthly?month=2024-11
+### Get System Stats (Admin)
+GET {{baseUrl}}/analytics/system
 Authorization: Bearer {{authToken}}
-
-### Get Yearly Summary
-GET {{baseUrl}}/analytics/yearly?year=2024
-Authorization: Bearer {{authToken}}
-
-### Get Category Breakdown
-GET {{baseUrl}}/analytics/categories
-Authorization: Bearer {{authToken}}
-

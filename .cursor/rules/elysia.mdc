@@ -1,0 +1,51 @@
+---
+alwaysApply: true
+---
+
+# Elysia Backend Best Practices
+
+## Structure & Layering
+- Organize features under `src/modules/<feature>` with dedicated `router.ts`, `controller.ts`, `service.ts`, `repository.ts`, and `model.ts` files; keep shared utilities under `src/core` / `src/utils`.
+- Treat each Elysia instance as a controller/route module; avoid passing raw `Context` objects around—destructure what you need and forward primitives to services.
+- Keep controllers thin: register routes, attach validation, marshal responses; push business logic into services and data access into repositories/models.
+
+## Validation & Models
+- Use `Elysia.t` schemas (`t.Object`, etc.) as the single source of truth for runtime validation and TypeScript inference (consume via `typeof schema.static`).
+- Group related schemas under namespace-like modules (e.g., `AuthModel`) and reuse them across routers/services; avoid separate interface definitions that drift from validation.
+
+## Services & Plugins
+- Prefer static classes or pure functions for services that don’t need request scope; for request-scoped utilities use Elysia plugins/macros with explicit `name` metadata so they dedupe automatically.
+- Decorate only request-dependent derived values (session, request IP, timestamp) to prevent tight coupling and improve testability.
+- When composing modules, `.use()` smaller service Elysia instances (macros/middleware) inside route controllers to share auth guards, validation, etc.
+
+## Controllers
+- Treat each Elysia instance as its own controller (`1 instance = 1 controller`) and define routes directly there to preserve inferred `Context` typing.
+- Avoid passing the entire Elysia `Context` into controller classes; destructure only the primitive values you need (body, params, user) and forward those to services.
+- If a controller class is needed, keep it framework-agnostic and free of HTTP concerns; let the router adapt HTTP context into plain data for the controller.
+
+## Services
+- Use abstract classes or static functions for non-request services so they remain alloc-free and easy to unit test.
+- Model request-scoped helpers as Elysia plugins/macros (`new Elysia({ name: 'Auth.Service' }).macro(...)`) so they integrate via `.use()` and maintain type inference.
+- Ensure plugins have a `name` property to leverage Elysia’s deduplication and avoid re-registering the same macros multiple times.
+
+## Decorators & Derived Values
+- Decorate only per-request data (ip, timestamp, session) and avoid decorating heavy or static objects, keeping the app loosely coupled.
+- Favor macros or `.decorate()` when a value truly depends on runtime request data; otherwise, inject via services or config modules.
+
+## Testing
+- Use `app.handle(new Request(...))` in Bun tests to exercise routes/controllers with full lifecycle hooks instead of spinning up a server.
+- Keep controllers/services pure enough that they can be unit tested directly without Elysia when possible.
+
+## Models & Validation
+- Define request/response DTOs with `Elysia.t` schemas; export both the schema and `typeof schema.static` types to keep runtime and compile-time aligned.
+- Avoid duplicate TypeScript interfaces or class-based DTOs; rely on `t.Object` definitions as the single source of truth.
+- Group related schemas via Elysia’s `.model()` registration (e.g., `auth.Sign`) for better reuse, OpenAPI inference, and autocomplete support.
+
+## Error Handling & Testing
+- Throw `status(code, message)` (or custom AppError) from services to leverage Elysia’s HTTP error handling; keep error translation centralized.
+- Use `app.handle(new Request(...))` inside Bun tests to exercise routes without spinning up a server, ensuring lifecycle hooks are included.
+
+## General Guidance
+- Avoid tying controllers to Elysia `Context`; keep them framework-agnostic for portability.
+- Refrain from declaring models as classes or separate interfaces—stick with `t.*` schemas to maintain type/runtime parity.
+- Favor modular, feature-based folders to keep code discoverable and ready for future scaling or extraction into independent services.

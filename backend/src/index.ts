@@ -1,7 +1,15 @@
-import { Elysia } from "elysia";
+import { createApp } from "./core/app";
+import "./core/db/firebase"; // Import to ensure init runs
+import { env } from "./core/config/env";
 
-const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
+const start = async () => {
+  const app = createApp();
 
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);
+  app.listen(env.PORT, () => {
+    console.log(
+      `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+    );
+  });
+};
+
+start();

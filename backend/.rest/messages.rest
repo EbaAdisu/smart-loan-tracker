@@ -1,11 +1,8 @@
-### Smart Loan Tracker API - Message Endpoints
+### Smart Loan Tracker API - Messaging Endpoints
 @baseUrl = http://localhost:3000/api
-@authToken = your-auth-token-here
-@loanId = loan-id-here
-
-### Get Messages for Loan
-GET {{baseUrl}}/messages/loans/{{loanId}}
-Authorization: Bearer {{authToken}}
+@authToken = your-firebase-id-token-here
+@receiverId = some-receiver-uid
+@notificationId = notification-id-here
 
 ### Send Message
 POST {{baseUrl}}/messages
@@ -13,19 +10,18 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "loanId": "{{loanId}}",
-  "content": "Hello, when can you make the payment?"
+  "receiverId": "{{receiverId}}",
+  "content": "Hello, about that loan..."
 }
 
-### Get Unread Message Count
-GET {{baseUrl}}/messages/unread-count
+### Get Chat History
+GET {{baseUrl}}/messages/{{receiverId}}
 Authorization: Bearer {{authToken}}
 
-### Get Recent Messages
-GET {{baseUrl}}/messages/recent
+### Get Notifications
+GET {{baseUrl}}/notifications
 Authorization: Bearer {{authToken}}
 
-### Get Recent Messages - With Limit
-GET {{baseUrl}}/messages/recent?limit=20
+### Mark Notification Read
+PATCH {{baseUrl}}/notifications/{{notificationId}}/read
 Authorization: Bearer {{authToken}}
-
